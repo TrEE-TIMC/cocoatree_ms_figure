@@ -1,0 +1,7 @@
+This labnotebook is based on sphinx. It supports markdown files and
+restructured text files.
+
+Before using it:
+
+- [ ] Change the project name in `conf.py`
+- [ ] Change the author name in `conf.py`

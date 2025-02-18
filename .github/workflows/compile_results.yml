@@ -1,0 +1,41 @@
+name: build notebook
+on: [push]
+jobs:
+    run_tests:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code 🛎️
+              uses: actions/checkout@v2
+              with:
+                persist-credentials: false
+
+            - name: Install latex
+              run: sudo apt-get update; sudo apt-get install texlive-base
+
+            - name: Setup Miniconda
+              uses: conda-incubator/setup-miniconda@v2
+              with:
+                auto-update-conda: true
+                auto-activate-base: false
+                miniconda-version: 'latest'
+                python-version: 3.9
+                environment-file: environment.yml
+                activate-environment: research
+
+            - name: Compile labnotebook
+              shell: bash -l {0}
+              run: |
+                pushd results/
+                make html #SPHINXOPTS="-W"
+                popd
+                touch results/_build/html/.nojekyll
+
+            - name: Deploying article/results on github pages
+              uses: JamesIves/github-pages-deploy-action@3.7.1
+              with:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                BRANCH: gh-pages
+                FOLDER: results/_build/html
+                CLEAN: true
+

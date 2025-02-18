@@ -1,0 +1,11 @@
+name: research
+channels:
+    - default
+dependencies:
+    - python=3.9
+    - pip
+    - pip:
+        - numpy
+        - sphinx
+        - myst-parser
+        - linkify-it-py
