@@ -1,6 +1,8 @@
 from glob import glob
 
-datasets =  [f.split("/")[-2] for f in glob("../data/*/alignment.faa.gz")]
+data_folder = "../../data"
+datasets =  [f.split("/")[-2] for f in glob(os.path.join(
+    data_folder, "*/alignment.faa.gz"))]
 coevolution_metrics = ["SCA", "MI", "NMI"]
 corrections = ["none", "APC", "entropy"]
 
@@ -18,7 +20,7 @@ rule run_all:
 
 rule cocoatree:
     input:
-        filename="../data/{dataset}/alignment.faa.gz",
+        filename=os.path.join(data_folder, "{dataset}/alignment.faa.gz"),
         script="run_cocoatree.py"
     output: "results/cocoatree/{dataset}/cocoatree_{metric}_{correction}.csv"
     shell: """
