@@ -3,3 +3,70 @@ For each dataset, put the MSA, PDB, and groundtruth sectors in a folder
 structured as follows
 
 
+HALABI dataset
+--------------
+
+Paper: https://doi-org.insb.bib.cnrs.fr/10.1016/j.cell.2009.07.038
+
+Files:
+- 3tgi.pdb = crystal structure of rat's trypsin (copied from cocoatree's datasets)
+- halabi_alignment.fasta = MSA from the Halabi paper (1470 records of length 832) (copied from cocoatree's datasets)
+- halabi_metadata.csv = metadata extracted from the sequence names in the alignment file (copied from cocoatree's datasets)
+- halabi_sectors.npz = (copied from cocoatree's datasets)
+
+
+RIVOIRE dataset
+---------------
+
+Paper: https://doi.org/10.1371/journal.pcbi.1004817
+pySCA git repo: https://github.com/ranganathanlab/pySCA/tree/master
+Alignments: https://zenodo.org/records/14599586
+
+Files:
+- 3tgi.pdb = crystal structure of rat's trypsin (copied from cocoatree's datasets)
+- rivoire_alignment.fasta = MSA from the Rivoire paper (1390 records of length 832) (copied from cocoatree's datasets)
+- rivoire_metadata.csv = metadata extracted from the sequence identifiers of rivoire_alignment.fasta (copied from cocoatree's datasets)
+- rivoire_sectors.npz = (copied from cocoatree's datasets)
+- rivoire_phylo_tree.nw = phylogenetic tree built with the 1390 sequences dataset
+    In case for ITOL visualization:
+    - itol_annot_most_abundant_class.txt
+    - itol_annot_most_abundant_family.txt
+    - itol_annot_most_abundant_order.txt
+    - itol_annot_most_abundant_prot_specificity.txt
+- rivoire_long_alignment.fasta = new trypsin alignment (101543 records of length 260) downloaded from the zenodo repository
+
+
+RHOMBOID dataset
+----------------
+
+Paper: https://doi-org.insb.bib.cnrs.fr/10.1016/j.str.2020.07.015
+
+The alignment given by the authors is the processed alignment, thus the sequences are not complete. For example, the alignment is 135 positions long while the pdb sequence of E. coli GLPG protein (2NRF.pdb) has 182 positions.
+To get the mapping between them, I aligned the GLPG_ECOLI sequence extracted from the MSA and the 2NRF sequence extracted from the PDB file. I proceeded the same with GLPG_HAEIN and 2NR9 because in the paper, they graft their sectors between GLPG_ECOLI and GLPG_HAEIN. I then mapped the positions from the MSA to the named positions in both PDB files.
+
+Files:
+- 2NR9.pdb = pdb structure of GLPG_HAEIN (Haemophilus influenza)
+- 2NRF.pdb = pdb structure of GLPG_ECOLI (Escherichia coli)
+- mapping_GLPG_ECOLI_to_2NRF.csv = mapping between the positions of GLPG_ECOLI in the MSA (starting at 0) and the corresponding positions in 2NRF.pdb (with the pdb numerotation starting at 91)
+- mapping_GLPG_HAEIN_to_2NR9.csv = mapping between the positions of GLPG_HAEIN in the MSA (starting at 0) and the corresponding positions in 2NR9.pdb (with the pdb numerotation starting at 4)
+- rhomboid_2767_seqs.treefile = newick file of a tree computed using the full rhomboid alignment
+- rhomboid_MSA.fasta.gz = compressed MSA obtained from the supplementary data of https://doi-org.insb.bib.cnrs.fr/10.1016/j.str.2020.07.015
+- data_S3.xlsx = mutations that were tested for the sector grafting experiment
+- rhomboid_Uniprot_metadata.tsv = metadata extracted from Uniprot using the sequence identifiers in the alignment. /!\ Beware: the taxonomy column doesn't always have the same number of separators as there are more categories for eukaryotes than for prokaryotes /!\
+
+
+DHFR dataset
+------------
+
+Paper: https://pubs.acs.org/doi/10.1021/acs.jpcb.4c04195
+git repo: https://github.com/Kalmertl/SCA-Predicts-Correlated-Motions
+
+Files:
+- PF00186_35.fasta = alignment file (4422 records of length 802)
+- PF00186_for_Uniprot.txt = list of sequence identifiers used for the Uniprot search (extracted from the MSA)
+- media-1.docx = supplementary data downloaded from the paper
+- 4M6K.pdb = crystal structure of human dihydrofolate reductase (DHFR) bound to 2 NADP+ and folate https://doi.org/10.2210/pdb4M6K/pdb
+- 3QL3.pdb = crystal structure of the wild-type E. coli DHFR https://doi.org/10.2210/pdb3ql3/pdb
+- 3QL0.pdb = crystal structure of N23PP/S148A mutant of E. coli dihydrofolate reductase http://doi.org/10.2210/pdb3ql0/pdb
+- DHFR_Uniprot_metadata.tsv = metadata extracted from Uniprot using the sequence identifiers in the alignment
+- deleted_from_Uniprot.tsv = file containing the 316 obsolete sequences that were not matched in Uniprot for metadata (just in case, these sequences should be included in DHFR_Uniprot_metadata.tsv)
