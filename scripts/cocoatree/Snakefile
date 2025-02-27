@@ -1,0 +1,30 @@
+from glob import glob
+
+data_folder = "../../data"
+datasets =  [f.split("/")[-2] for f in glob(os.path.join(
+    data_folder, "*/alignment.faa.gz"))]
+coevolution_metrics = ["SCA", "MI", "NMI"]
+corrections = ["none", "APC", "entropy"]
+
+
+###############################################################################
+# Global commands that can be ran using `snakemake {command}`
+
+rule run_all:
+    input:
+        expand(
+            "results/cocoatree/{dataset}/cocoatree_{metric}_{correction}.csv",
+            dataset=datasets,
+            metric=coevolution_metrics,
+            correction=corrections),
+
+rule cocoatree:
+    input:
+        filename=os.path.join(data_folder, "{dataset}/alignment.faa.gz"),
+        script="run_cocoatree.py"
+    output: "results/cocoatree/{dataset}/cocoatree_{metric}_{correction}.csv"
+    shell: """
+    python {input.script} {input.filename} \
+        -m {wildcards.metric} \
+        -c {wildcards.correction} -o $(dirname {output})
+    """
