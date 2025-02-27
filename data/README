@@ -69,3 +69,4 @@ Files:
 - 3QL0.pdb = crystal structure of N23PP/S148A mutant of E. coli dihydrofolate reductase http://doi.org/10.2210/pdb3ql0/pdb
 - DHFR_Uniprot_metadata.tsv = metadata extracted from Uniprot using the sequence identifiers in the alignment
 - deleted_from_Uniprot.tsv = file containing the 316 obsolete sequences that were not matched in Uniprot for metadata (just in case, these sequences should be included in DHFR_Uniprot_metadata.tsv)
+- DHFR_sectors.npz = positions of the 4 sectors identified in the paper *I think on E. coli wild type pdb positions*
