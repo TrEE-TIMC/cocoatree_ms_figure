@@ -64,7 +64,6 @@ git repo: https://github.com/Kalmertl/SCA-Predicts-Correlated-Motions
 Files:
 - PF00186_35.fasta = alignment file (4422 records of length 802)
 - PF00186_for_Uniprot.txt = list of sequence identifiers used for the Uniprot search (extracted from the MSA)
-- media-1.docx = supplementary data downloaded from the paper
 - 4M6K.pdb = crystal structure of human dihydrofolate reductase (DHFR) bound to 2 NADP+ and folate https://doi.org/10.2210/pdb4M6K/pdb
 - 3QL3.pdb = crystal structure of the wild-type E. coli DHFR https://doi.org/10.2210/pdb3ql3/pdb
 - 3QL0.pdb = crystal structure of N23PP/S148A mutant of E. coli dihydrofolate reductase http://doi.org/10.2210/pdb3ql0/pdb
