@@ -12,7 +12,7 @@ Files:
 - 3tgi.pdb = crystal structure of rat's trypsin (copied from cocoatree's datasets)
 - halabi_alignment.fasta = MSA from the Halabi paper (1470 records of length 832) (copied from cocoatree's datasets)
 - halabi_metadata.csv = metadata extracted from the sequence names in the alignment file (copied from cocoatree's datasets)
-- halabi_sectors.npz = (copied from cocoatree's datasets)
+- halabi_sectors.npz = three np.arrays of the sectors identified in the paper (copied from cocoatree's datasets)
 
 
 RIVOIRE dataset
@@ -52,7 +52,9 @@ Files:
 - rhomboid_2767_seqs.treefile = newick file of a tree computed using the full rhomboid alignment
 - rhomboid_MSA.fasta.gz = compressed MSA obtained from the supplementary data of https://doi-org.insb.bib.cnrs.fr/10.1016/j.str.2020.07.015
 - data_S3.xlsx = mutations that were tested for the sector grafting experiment
-- rhomboid_Uniprot_metadata.tsv = metadata extracted from Uniprot using the sequence identifiers in the alignment. /!\ Beware: the taxonomy column doesn't always have the same number of separators as there are more categories for eukaryotes than for prokaryotes /!\
+- rhomboid_Uniprot_metadata.tsv = metadata extracted from Uniprot using the sequence identifiers in the alignment.
+/!\ Beware: the taxonomy column doesn't always have the same number of separators as there are more categories for eukaryotes than for prokaryotes /!\
+- rhomboid_sectors.npz = two np.arrays of the sectors identified in the paper. I extracted the positions from the supplementary data of the paper (Data S2), they do not precise whether it's on E. coli or H. influenzae... but the position indexes seem more in line with E. coli PDB numbering so I would go with that.
 
 
 DHFR dataset
