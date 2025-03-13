@@ -23,8 +23,12 @@ if dataset == "rivoire":
     data = datasets.load_S1A_serine_proteases(paper="rivoire")
 elif dataset == "halabi":
     data = datasets.load_S1A_serine_proteases(paper="halabi")
+elif dataset == "rhomboid":
+    data = datasets.load_rhomboid_proteases()
 
 n_components = len([k for k in data["sector_positions"].keys()])
+if dataset == "rhomboid":
+    n_components = 3
 
 # Perform cocoatree analysis
 coevolution_matrix, results = perform_sca(
@@ -39,21 +43,32 @@ sectors = [
     for key in data["sector_positions"].keys()]
 
 pdb_pos = data["pdb_positions"]
-is_mapped = np.array([s != "-" for s in data["alignment"][0]])
-pdb_mapping = [int(val) if f else None
-               for f, val in zip(
-               is_mapped, (is_mapped.cumsum()-1))]
-pdb_pos_mapping = [
-    pdb_pos[j]
-    if i else None
-    for i, j in zip(is_mapped, is_mapped.cumsum()-1)]
+if dataset == "rhomboid":
+    from rhomboid_dataset import align_rhomboid_pdb
+    msa = align_rhomboid_pdb()
+    pdb_mapping = msa.indices[0][msa.indices[1] != -1]
+    pdb_pos_mapping = np.array(pdb_pos)[pdb_mapping]
+else:
+    is_mapped = np.array([s != "-" for s in data["alignment"][0]])
+    pdb_mapping = [int(val) if f else None
+                   for f, val in zip(
+                   is_mapped, (is_mapped.cumsum()-1))]
+    pdb_pos_mapping = [
+        pdb_pos[j]
+        if i else None
+        for i, j in zip(is_mapped, is_mapped.cumsum()-1)]
+
 results["pdb_pos"] = pdb_mapping
 results["pdb_named_pos"] = pdb_pos_mapping
+n_components = len([k for k in data["sector_positions"].keys()])
 
+mask = results["pdb_named_pos"].isna()
 for sector_id in range(n_components):
     results[f"orig_sector_{sector_id}"] = np.isin(
         results["pdb_named_pos"],
         sectors[sector_id])
+    results.loc[mask, f"orig_sector_{sector_id}"] = False
+
 
 # Write output
 if outdir is not None:
