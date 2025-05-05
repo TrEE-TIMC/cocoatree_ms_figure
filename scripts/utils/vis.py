@@ -2,7 +2,7 @@ import numpy as np
 from .colors import colors
 
 
-def plot_scatter_sectors(ax, results, ica, icb):
+def plot_scatter_sectors(ax, results, ica, icb, annotate=True):
     """
     Plot sectors as a scatter plot
 
@@ -51,21 +51,23 @@ def plot_scatter_sectors(ax, results, ica, icb):
         label="Both",
         color=colors["both"])
 
-    mask = results["is_cocoatree_sector"] | results["is_orig_sector"]
-    for i, (x, y, text) in results.loc[mask,
-                                       [ica,
-                                        icb,
-                                        "pdb_named_pos"]].iterrows():
-        if isinstance(text, float):
-            if np.isnan(text):
-                text = "."
-            else:
-                text = "%d" % text
-        ax.text(x, y+.01, text,
-                fontsize=8,
-                ha='center', va='center')
+    if annotate:
+        mask = results["is_cocoatree_sector"] | results["is_orig_sector"]
+        for i, (x, y, text) in results.loc[mask,
+                                           [ica,
+                                            icb,
+                                            "pdb_named_pos"]].iterrows():
+            if isinstance(text, float):
+                if np.isnan(text):
+                    text = "."
+                else:
+                    text = "%d" % text
+            ax.text(x, y+.01, text,
+                    fontsize=8,
+                    ha='center', va='center')
 
     ax.spines["top"].set_linewidth(0)
     ax.spines["right"].set_linewidth(0)
+
     ax.set_xlabel(ica, fontweight="bold")
     ax.set_ylabel(icb, fontweight="bold")
