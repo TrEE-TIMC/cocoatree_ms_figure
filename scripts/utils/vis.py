@@ -1,5 +1,7 @@
 import numpy as np
 from .colors import colors
+from matplotlib.lines import Line2D
+import matplotlib.pyplot as plt
 
 
 def plot_scatter_sectors(ax, results, ica, icb, annotate=True):
@@ -19,37 +21,53 @@ def plot_scatter_sectors(ax, results, ica, icb, annotate=True):
     ax.plot(
         results.loc[mask, ica],
         results.loc[mask, icb],
-        marker="o",
+        marker=".",
         linewidth=0,
+        markersize=4,
         color=colors["default"],)
 
-    mask = results["is_only_cocoatree"]
-    ax.plot(
-        results.loc[mask, ica],
-        results.loc[mask, icb],
-        marker="o",
-        linewidth=0,
-        color=colors["cocoatree"],
-        label="Only cocoatree",
-        )
+    for sector in ["default", "sector_1", "sector_2", "sector_3"]:
+        if sector != "default":
+            marker_mask = results[sector]
+        else:
+            marker_mask = ~results["is_cocoatree_sector"]
+        color = colors[sector]
+        mask = results["is_only_cocoatree"]
+        ax.plot(
+            results.loc[mask & marker_mask, ica],
+            results.loc[mask & marker_mask, icb],
+            marker="o",
+            markeredgecolor=color,
+            linewidth=0,
+            markersize=4,
+            markerfacecolor="none",
+            )
 
-    mask = results["is_only_orig"]
-    ax.plot(
-        results.loc[mask, ica],
-        results.loc[mask, icb],
-        marker="o",
-        linewidth=0,
-        label="Only orig.",
-        color=colors["other"])
+        mask = results["is_only_orig"]
+        ax.plot(
+            results.loc[mask & marker_mask, ica],
+            results.loc[mask & marker_mask, icb],
+            marker="x",
+            linewidth=0,
+            markersize=4,
+            color=color,
+            )
 
-    mask = results["is_both"]
-    ax.plot(
-        results.loc[mask, ica],
-        results.loc[mask, icb],
-        marker="o",
-        linewidth=0,
-        label="Both",
-        color=colors["both"])
+        mask = results["is_both"]
+        ax.plot(
+            results.loc[mask & marker_mask, ica],
+            results.loc[mask & marker_mask, icb],
+            marker="o",
+            linewidth=0,
+            markersize=4,
+            color=color)
+
+        ax.tick_params(
+            axis='both', which='both', labelsize='x-small',
+            bottom=True, top=False, labeltop=False, labelbottom=True,
+            left=True, right=False, labelleft=True, labelright=False)
+        ax.xaxis.set_major_locator(plt.MaxNLocator(3))
+        ax.yaxis.set_major_locator(plt.MaxNLocator(3))
 
     if annotate:
         mask = results["is_cocoatree_sector"] | results["is_orig_sector"]
@@ -69,5 +87,33 @@ def plot_scatter_sectors(ax, results, ica, icb, annotate=True):
     ax.spines["top"].set_linewidth(0)
     ax.spines["right"].set_linewidth(0)
 
-    ax.set_xlabel(ica, fontweight="bold")
-    ax.set_ylabel(icb, fontweight="bold")
+    ax.set_xlabel(ica, fontsize="small",
+                  fontweight="bold",
+                  labelpad=2)
+    ax.set_ylabel(icb, fontsize="small", fontweight="bold", labelpad=2)
+
+
+def create_legend():
+    sectors = [
+        Line2D([0], [0], linewidth=0, marker='o', color=colors[f"sector_{i}"],
+               label=f"sector {i}",
+               markersize=4) for i in range(1, 4)]
+    methods = [
+        Line2D([0], [0], marker='o', color="0",
+               linewidth=0,
+               label="both",
+               markersize=4),
+        Line2D([0], [0], marker='o', color="none",
+               markeredgecolor="0",
+               linewidth=0,
+               label="cocoatree",
+               markersize=4),
+        Line2D([0], [0], marker='x', color="0",
+               label="orig.", linewidth=0,
+               markersize=4),
+        Line2D([0], [0], marker='.', color="0",
+               label="none", linewidth=0,
+               markersize=4),
+
+               ]
+    return {"sectors": sectors, "methods": methods}

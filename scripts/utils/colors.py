@@ -1,10 +1,25 @@
+from matplotlib.colors import LinearSegmentedColormap
+
 # #4ab38d
 # #154c3b
 lightcolors = {
-    "cocoatree": "#4ab38d",
-    "other": "#c185b7",
-    "both": "#40aae7",
-    "default": "#9cadbc"}
+    "cocoatree": "#AB0000",
+    "other": "#006c4b",
+    "both": "#006ab2",
+    "default": "#9cadbc",
+    "sector_1": "#AB0000",
+    "sector_2": "#006ab2",
+    "sector_3": "#006c4b"}
+
+
+sectors_cm = {
+    "sector_1": LinearSegmentedColormap.from_list(
+        "sector_1", ['white', lightcolors["sector_1"]]),
+    "sector_2": LinearSegmentedColormap.from_list(
+        "sector_2", ['white', lightcolors["sector_2"]]),
+    "sector_3": LinearSegmentedColormap.from_list(
+        "sector_3", ['white', lightcolors["sector_3"]])}
+
 
 darkcolors = {
     "cocoatree": "#31775d",
