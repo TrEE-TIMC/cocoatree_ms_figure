@@ -122,6 +122,9 @@ ax.set_yticklabels(["both"], fontweight="bold")
 ax.tick_params(axis='both', which='both', labelsize='x-small',
                bottom=True, top=False, labeltop=False, labelbottom=True,
                left=False, right=False, labelleft=False, labelright=True)
-ax.set_xticks([0, len(results)])
+ax.xaxis.set_major_locator(plt.MaxNLocator(5))
+ax.set_xlabel("Position in PDB", fontweight="bold", fontsize="small",
+              labelpad=2)
+
 os.makedirs("figures", exist_ok=True)
 fig.savefig("figures/figure_1.pdf")
