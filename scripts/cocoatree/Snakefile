@@ -17,6 +17,9 @@ rule run_all:
             dataset=datasets,
             metric=coevolution_metrics,
             correction=corrections),
+        expand(
+            "results/cocoatree/{dataset}/conservation.csv",
+            dataset=datasets)
 
 rule cocoatree:
     input:
@@ -27,4 +30,14 @@ rule cocoatree:
     python {input.script} {input.filename} \
         -m {wildcards.metric} \
         -c {wildcards.correction} -o $(dirname {output})
+    """
+
+rule conservation:
+    input:
+        filename=os.path.join(data_folder, "{dataset}/alignment.faa.gz"),
+        script="compute_conservation.py"
+    output: "results/cocoatree/{dataset}/conservation.csv"
+    shell: """
+    python {input.script} {input.filename} \
+        -o $(dirname {output})
     """
