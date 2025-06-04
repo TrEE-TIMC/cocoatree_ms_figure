@@ -1,0 +1,41 @@
+from glob import glob
+
+datasets =  ["halabi", "rivoire", "rhomboid"]
+coevolution_metrics = ["SCA", "MI", "NMI"]
+corrections = ["none", "APC", "entropy"]
+
+
+###############################################################################
+# Global commands that can be ran using `snakemake {command}`
+
+rule run_all:
+    input:
+        expand(
+            "results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv",
+            dataset=datasets,
+            metric=coevolution_metrics,
+            correction=corrections),
+        expand("images/cocoatree_gt/{dataset}/{metric}_{correction}_sectors.png",
+	    dataset=datasets,
+            metric=coevolution_metrics,
+            correction=corrections)
+
+
+rule cocoatree:
+    input:
+        script="run_cocoatree_with_gt.py"
+    output: "results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv"
+    shell: """
+    python {input.script} {wildcards.dataset} \
+        -m {wildcards.metric} \
+        -c {wildcards.correction} -o $(dirname {output})
+    """
+
+rule plot_sectors:
+    input:
+        script="plot_sectors.py",
+        res="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv"
+    output: "images/cocoatree_gt/{dataset}/{metric}_{correction}_sectors.png"
+    shell: """
+    python {input.script} {input.res} -o {output}
+    """

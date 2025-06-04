@@ -64,11 +64,10 @@ n_components = len([k for k in data["sector_positions"].keys()])
 
 mask = results["pdb_named_pos"].isna()
 for sector_id in range(n_components):
-    results[f"orig_sector_{sector_id}"] = np.isin(
+    results[f"orig_sector_{sector_id+1}"] = np.isin(
         results["pdb_named_pos"],
         sectors[sector_id])
-    results.loc[mask, f"orig_sector_{sector_id}"] = False
-
+    results.loc[mask, f"orig_sector_{sector_id+1}"] = False
 
 # Write output
 if outdir is not None:

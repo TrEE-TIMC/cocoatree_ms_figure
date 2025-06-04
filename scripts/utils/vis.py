@@ -2,6 +2,7 @@ import numpy as np
 from .colors import colors
 from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
+from .colors import sectors_cm
 
 
 def plot_scatter_sectors(ax, results, ica, icb, annotate=True):
@@ -117,3 +118,27 @@ def create_legend():
 
                ]
     return {"sectors": sectors, "methods": methods}
+
+
+def plot_sectors(ax, results,
+                 columns=["sector_1", "sector_2", "sector_3"]):
+    """
+    Plot sectors
+
+    Parameters
+    ----------
+    """
+    for i, col in enumerate(columns):
+        sec = results[col].values[np.newaxis, :].astype(float)
+        sec[sec == 0] = np.nan
+        ax.matshow(sec, aspect="auto", cmap=sectors_cm[f"sector_{i+1}"],
+                   vmin=0)
+
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_yticks([0])
+    ax.set_yticklabels(["cocoatree"], fontweight="bold")
+
+    ax.tick_params(axis='both', which='both', labelsize='x-small',
+                   bottom=False, top=False, labeltop=False, labelbottom=False,
+                   left=False, right=False, labelleft=False, labelright=True)
