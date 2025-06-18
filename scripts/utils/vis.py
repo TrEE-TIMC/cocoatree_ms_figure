@@ -121,7 +121,7 @@ def create_legend():
 
 
 def plot_sectors(ax, results,
-                 columns=["sector_1", "sector_2", "sector_3"]):
+                 columns=["sector_1", "sector_2", "sector_3"], title=""):
     """
     Plot sectors
 
@@ -132,12 +132,12 @@ def plot_sectors(ax, results,
         sec = results[col].values[np.newaxis, :].astype(float)
         sec[sec == 0] = np.nan
         ax.matshow(sec, aspect="auto", cmap=sectors_cm[f"sector_{i+1}"],
-                   vmin=0)
+                   vmin=0, vmax=1.2)
 
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set_yticks([0])
-    ax.set_yticklabels(["cocoatree"], fontweight="bold")
+    ax.set_yticklabels([title], fontweight="bold")
 
     ax.tick_params(axis='both', which='both', labelsize='x-small',
                    bottom=False, top=False, labeltop=False, labelbottom=False,

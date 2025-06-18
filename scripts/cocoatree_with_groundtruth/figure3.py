@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import itertools
 import numpy as np
 import pandas as pd
+from utils.vis import sectors_cm
 from plotmastery.utils_subfigure import add_letter_and_title
 from plotmastery import utils_heatmap
 
@@ -47,37 +48,48 @@ def compute_all_vs_all(sectors_per_method, comp1=0, comp2=0):
     return IOU_metric
 
 
-def get_best_ordered_sectors(res):
+def get_best_ordered_sectors(res, dataset="halabi", type="SCA"):
     sector_cols = [c for c in res.columns if c.startswith("sector")]
 
     sectors = []
     # It's not the best strategy, but just get iteratively the "best
     # sector"
-    for s in orig_sectors:
-        all_scores = []
-        for s1 in sector_cols:
-            all_scores.append(
-                compute_IOU_metric(
-                    s,
-                    np.where(res[s1])[0]))
 
-        s = sector_cols.pop(np.argmax(all_scores))
-        sectors.append(np.where(res[s])[0])
+    all_scores = np.zeros((len(sector_cols), len(sector_cols)))
+    for i, s in enumerate(orig_sectors):
+        for j, s1 in enumerate(sector_cols):
+            all_scores[i, j] = compute_IOU_metric(
+                    s,
+                    np.where(res[s1])[0])
+    order = all_scores.argmax(axis=1)
+    if len(np.unique(order)) != len(sector_cols):
+        order = np.arange(len(sector_cols))
+        if dataset == "halabi" and type == "NMI":
+            order = [2, 1, 0]
+        if dataset == "halabi" and type == "MI":
+            order = [1, 0, 2]
+        if dataset == "rhomboid" and type == "MI":
+            order = [0, 2, 1]
+
+    sectors = [np.where(res[sector_cols[o]])[0] for o in order]
     return sectors
 
 
-sca_sectors = get_best_ordered_sectors(sca_res)
-mi_sectors = get_best_ordered_sectors(mi_res)
-nmi_sectors = get_best_ordered_sectors(nmi_res)
-miapc_sectors = get_best_ordered_sectors(miapc_res)
+sca_sectors = get_best_ordered_sectors(sca_res, dataset=dataset, type="SCA")
+mi_sectors = get_best_ordered_sectors(mi_res, dataset=dataset, type="MI")
+nmi_sectors = get_best_ordered_sectors(nmi_res, dataset=dataset, type="NMI")
+miapc_sectors = get_best_ordered_sectors(
+    miapc_res, dataset=dataset,
+    type="MIAPC")
 all_sectors = [orig_sectors, sca_sectors, mi_sectors, nmi_sectors,
                miapc_sectors]
 
 n_comp = len(sca_sectors)
 
 letters = ["A", "B", "C"]
-sector_names = ["Red", "Blue", "Green"]
+sector_names = ["Green", "Red", "Blue"]
 
+vmax = None
 fig, axes = plt.subplots(figsize=(8, 8), ncols=n_comp, nrows=n_comp)
 for i, j in itertools.product(range(3), range(3)):
 
@@ -87,7 +99,9 @@ for i, j in itertools.product(range(3), range(3)):
         continue
 
     IOU_metric_comp1 = compute_all_vs_all(all_sectors, comp1=i, comp2=j)
-    m = ax.matshow(IOU_metric_comp1, vmin=0, cmap="Oranges")
+    if vmax is None:
+        vmax = IOU_metric_comp1.max()
+    m = ax.matshow(IOU_metric_comp1, vmin=0, vmax=vmax, cmap="Oranges")
     utils_heatmap.annotate_heatmap(
         m, valfmt="{x:1.0f}",
         fontsize="x-small")
@@ -106,8 +120,9 @@ for i, j in itertools.product(range(3), range(3)):
     else:
         ax.set_yticks([])
 
+fig.savefig(f"figures/{dataset}_confusion_all.pdf")
 
-cmaps = ["Reds", "Blues", "Greens"]
+cmaps = list(sectors_cm.values())
 fig, axes = plt.subplots(figsize=(8, 3), ncols=n_comp,
                          tight_layout=True)
 for i in range(n_comp):
@@ -129,4 +144,6 @@ for i in range(n_comp):
                bottom=True, top=False, labeltop=False, labelbottom=True,
                left=True, right=False, labelright=False, labelleft=True)
 
-    add_letter_and_title(ax, letters[i], sector_names[i])
+    add_letter_and_title(ax, letters[i], sector_names[i] + " sector")
+
+fig.savefig(f"figures/{dataset}_confusion_row.pdf")

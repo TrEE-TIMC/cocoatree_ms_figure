@@ -49,19 +49,26 @@ ax.add_artist(sec_legend)
 
 ###############################################################################
 # Mapping between all
-results = pd.read_csv("results/cocoatree_gt/halabi/cocoatree_SCA_none.csv")
+dataset = "rhomboid"
+results = pd.read_csv(
+    f"results/cocoatree_gt/{dataset}/cocoatree_SCA_none.csv")
 results = annotate_results(results)
 results = results.loc[~results["pdb_pos"].isna()]
 
 # Cocoatree sectors
 ax = fig.add_subplot(gs[17, :-2])
-add_letter_and_title(ax, "C.", title="cocoatree vs pysca on rhomboid")
-plot_sectors(ax, results)
+add_letter_and_title(ax, "C.", title=dataset.capitalize())
+if dataset == "halabi":
+    order = ["sector_3", "sector_1", "sector_2"]
+else:
+    order = ["sector_2", "sector_3", "sector_1"]
+plot_sectors(ax, results, columns=order, title="cocoatree")
 
 # Original sectors
 ax = fig.add_subplot(gs[18, :-2])
 plot_sectors(ax, results,
-             columns=["orig_sector_1", "orig_sector_2", "orig_sector_3"])
+             columns=["orig_sector_1", "orig_sector_2", "orig_sector_3"],
+             title="orig")
 
 # Both
 ax = fig.add_subplot(gs[19, :-2])

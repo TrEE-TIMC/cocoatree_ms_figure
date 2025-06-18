@@ -7,9 +7,9 @@ lightcolors = {
     "other": "#006c4b",
     "both": "#006ab2",
     "default": "#9cadbc",
-    "sector_1": "#AB0000",
-    "sector_2": "#006ab2",
-    "sector_3": "#006c4b"}
+    "sector_2": "#AB0000",
+    "sector_3": "#006ab2",
+    "sector_1": "#006c4b"}
 
 
 sectors_cm = {
@@ -18,8 +18,8 @@ sectors_cm = {
     "sector_2": LinearSegmentedColormap.from_list(
         "sector_2", ['white', lightcolors["sector_2"]]),
     "sector_3": LinearSegmentedColormap.from_list(
-        "sector_3", ['white', lightcolors["sector_3"]])}
-
+        "sector_3", ['white', lightcolors["sector_3"]])
+    }
 
 darkcolors = {
     "cocoatree": "#31775d",
@@ -29,4 +29,3 @@ darkcolors = {
 }
 
 colors = lightcolors
-
