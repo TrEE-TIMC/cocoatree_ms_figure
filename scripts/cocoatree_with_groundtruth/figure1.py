@@ -9,8 +9,8 @@ from plotmastery.utils_subfigure import add_letter_and_title
 from utils.postprocessing import annotate_results
 
 
-fig = plt.figure(figsize=(7.5, 4))
-gs = GridSpec(20, 20, figure=fig, top=0.9, left=0.1)
+fig = plt.figure(figsize=(7.5, 3.5))
+gs = GridSpec(20, 30, figure=fig, top=0.9, left=0.1)
 
 ###############################################################################
 # Start with halabi results
@@ -26,21 +26,32 @@ add_letter_and_title(ax, "A.", "Halabi")
 results = pd.read_csv("results/cocoatree_gt/rhomboid/cocoatree_SCA_none.csv")
 results = annotate_results(results)
 
-ax = fig.add_subplot(gs[:12, 10:-2])
+ax = fig.add_subplot(gs[:12, 10:18])
 plot_scatter_sectors(ax, results, "IC1", "IC2", annotate=False)
 add_letter_and_title(ax, "B.", "Rhomboid")
+
+###############################################################################
+# DHFR results
+results = pd.read_csv("results/cocoatree_gt/DHFR/cocoatree_SCA_none.csv")
+results = annotate_results(results)
+
+ax = fig.add_subplot(gs[:12, 20:-2])
+plot_scatter_sectors(ax, results, "IC1", "IC2", annotate=False)
+add_letter_and_title(ax, "C.", "DHFR")
+
+
 
 ###############################################################################
 # Legend
 
 legend = create_legend()
 sec_legend = ax.legend(
-    loc=(1, .7), frameon=False, fontsize="x-small",
+    loc=(1.05, .65), frameon=False, fontsize="x-small",
     handles=legend["sectors"], title="Sectors",
     title_fontproperties={"weight": "bold",
                           "size": "small"},
     alignment="left")
-ax.legend(loc=(1, .15), frameon=False, fontsize="x-small",
+ax.legend(loc=(1.05, .1), frameon=False, fontsize="x-small",
           handles=legend["methods"], title="Methods",
           title_fontproperties={"weight": "bold",
                                 "size": "small"},
@@ -55,11 +66,16 @@ results = pd.read_csv(
 results = annotate_results(results)
 results = results.loc[~results["pdb_pos"].isna()]
 
+columns = ["orig_sector_1", "orig_sector_2", "orig_sector_3"]
 # Cocoatree sectors
 ax = fig.add_subplot(gs[17, :-2])
-add_letter_and_title(ax, "C.", title=dataset.capitalize())
+add_letter_and_title(ax, "D.", title=dataset.capitalize())
 if dataset == "halabi":
     order = ["sector_3", "sector_1", "sector_2"]
+elif dataset == "DHFR":
+    order = ["sector_3", "sector_1", "sector_2", "sector_4"]
+    columns = ["orig_sector_1", "orig_sector_2", "orig_sector_3",
+    "orig_sector_4"]
 else:
     order = ["sector_2", "sector_3", "sector_1"]
 plot_sectors(ax, results, columns=order, title="cocoatree")
@@ -67,7 +83,7 @@ plot_sectors(ax, results, columns=order, title="cocoatree")
 # Original sectors
 ax = fig.add_subplot(gs[18, :-2])
 plot_sectors(ax, results,
-             columns=["orig_sector_1", "orig_sector_2", "orig_sector_3"],
+             columns=columns,
              title="orig")
 
 # Both

@@ -3,12 +3,10 @@ Aligning the PDB with the alignment
 """
 
 
-from cocoatree import datasets
 from Bio import Align
 
 
-def align_rhomboid_pdb():
-    data = datasets.load_rhomboid_proteases()
+def align_pdb(data):
     aligner = Align.PairwiseAligner()
 
     pdb_seq = data["pdb_sequence"][0]

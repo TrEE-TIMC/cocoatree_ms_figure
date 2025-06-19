@@ -25,6 +25,8 @@ elif dataset == "halabi":
     data = datasets.load_S1A_serine_proteases(paper="halabi")
 elif dataset == "rhomboid":
     data = datasets.load_rhomboid_proteases()
+elif dataset == "DHFR":
+    data = datasets.load_DHFR()
 
 n_components = len([k for k in data["sector_positions"].keys()])
 if dataset == "rhomboid":
@@ -43,9 +45,9 @@ sectors = [
     for key in data["sector_positions"].keys()]
 
 pdb_pos = data["pdb_positions"]
-if dataset == "rhomboid":
-    from rhomboid_dataset import align_rhomboid_pdb
-    msa = align_rhomboid_pdb()
+if dataset in ["rhomboid", "DHFR"]:
+    from rhomboid_dataset import align_pdb
+    msa = align_pdb(data)
     pdb_mapping = msa.indices[0][msa.indices[1] != -1]
     pdb_pos_mapping = np.array(pdb_pos)[pdb_mapping]
 else:

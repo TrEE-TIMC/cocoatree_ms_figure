@@ -1,6 +1,6 @@
 from glob import glob
 
-datasets =  ["halabi", "rivoire", "rhomboid"]
+datasets =  ["halabi", "rivoire", "rhomboid", "DHFR"]
 coevolution_metrics = ["SCA", "MI", "NMI"]
 corrections = ["none", "APC", "entropy"]
 

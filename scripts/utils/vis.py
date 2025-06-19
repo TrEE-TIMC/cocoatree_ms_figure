@@ -27,7 +27,9 @@ def plot_scatter_sectors(ax, results, ica, icb, annotate=True):
         markersize=4,
         color=colors["default"],)
 
-    for sector in ["default", "sector_1", "sector_2", "sector_3"]:
+    sectors_columns = [c for c in results.columns if c.startswith("sector")]
+
+    for sector in sectors_columns + ["default"]:
         if sector != "default":
             marker_mask = results[sector]
         else:
@@ -98,7 +100,7 @@ def create_legend():
     sectors = [
         Line2D([0], [0], linewidth=0, marker='o', color=colors[f"sector_{i}"],
                label=f"sector {i}",
-               markersize=4) for i in range(1, 4)]
+               markersize=4) for i in range(1, 5)]
     methods = [
         Line2D([0], [0], marker='o', color="0",
                linewidth=0,

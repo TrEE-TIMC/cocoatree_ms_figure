@@ -41,3 +41,4 @@ plot_scatter_sectors(ax, results, "IC1", "IC3")
 if outname is not None:
     os.makedirs(os.path.dirname(outname), exist_ok=True)
     fig.savefig(outname)
+    fig.savefig(outname.replace(".png", ".pdf"))
