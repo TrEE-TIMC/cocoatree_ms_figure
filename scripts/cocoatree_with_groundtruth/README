@@ -1,0 +1,23 @@
+# Cocoatree retrieves known results from pySCA
+
+In this folder, we run cocoatree (all co-evolution metrics + all
+normalization) on several datasets added to cocoatree (halabi, rivoire, and
+rhomboid).
+
+Here are the scripts/results:
+
+    - `run_cocoatree_with_gt.py` loads datasets from cocoatree and runs the
+      analysis with the desired metric + correction. It writes results in
+      `results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv` and
+      the coevolution matrix in the same directory / filename but with
+      `-distances.csv`
+
+    - `plot_sectors.py`  plots the results of the IC with sectors colors +
+      groundtruth when known.
+
+    - `plot_figures_confusion_matrices.py`  plots the confusion matrix (both
+      row and all vs all formats)
+
+All results are generated when typing snakemake -c {njobs}.
+
+The figure_*.py plot the results for the main figures.

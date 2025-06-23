@@ -1,4 +1,5 @@
 from glob import glob
+import itertools
 
 datasets =  ["halabi", "rivoire", "rhomboid", "DHFR"]
 coevolution_metrics = ["SCA", "MI", "NMI"]
@@ -16,9 +17,13 @@ rule run_all:
             metric=coevolution_metrics,
             correction=corrections),
         expand("images/cocoatree_gt/{dataset}/{metric}_{correction}_sectors.png",
-	    dataset=datasets,
+	        dataset=datasets,
             metric=coevolution_metrics,
-            correction=corrections)
+            correction=corrections),
+        expand("figures/{dataset}/confusion_row.png",
+	        dataset=datasets),
+        expand("figures/{dataset}/confusion_row.pdf",
+	        dataset=datasets),
 
 
 rule cocoatree:
@@ -31,6 +36,7 @@ rule cocoatree:
         -c {wildcards.correction} -o $(dirname {output})
     """
 
+
 rule plot_sectors:
     input:
         script="plot_sectors.py",
@@ -38,4 +44,28 @@ rule plot_sectors:
     output: "images/cocoatree_gt/{dataset}/{metric}_{correction}_sectors.png"
     shell: """
     python {input.script} {input.res} -o {output}
+    """
+
+
+def all_res(wildcards):
+    """
+    """
+    all_results = [
+        f"results/cocoatree_gt/{wildcards.dataset}/cocoatree_{metric}_{correction}.csv"
+        for metric, correction in itertools.product(coevolution_metrics,
+                                                    corrections)]
+    return all_results
+
+
+# FIXME Cette règle ne prends pas en entrée toutes les matrices de coévolution
+# et les corrections. À regler !
+rule plot_confusion_matrix:
+    input:
+        script="plot_figure_confusion_matrices.py",
+        all_res=all_res
+    output:
+        png="figures/{dataset}/confusion_row.png",
+        pdf="figures/{dataset}/confusion_row.pdf"
+    shell: """
+    python {input.script} {wildcards.dataset}
     """
