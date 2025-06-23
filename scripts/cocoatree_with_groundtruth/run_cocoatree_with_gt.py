@@ -6,6 +6,8 @@ import numpy as np
 from cocoatree import datasets
 from cocoatree import perform_sca
 
+from utils.sectors import get_best_ordered_sectors
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("dataset")
@@ -72,6 +74,19 @@ for sector_id in range(n_components):
         results["pdb_named_pos"],
         sectors[sector_id])
     results.loc[mask, f"orig_sector_{sector_id+1}"] = False
+
+
+# Now reorder based on best match to original results
+
+order = get_best_ordered_sectors(results, dataset=dataset,
+                                 type=coevolution_metric)
+rename = {}
+for i, j in enumerate(order):
+    rename[f"PC{i+1}"] = f"PC{j+1}"
+    rename[f"IC{i+1}"] = f"IC{j+1}"
+    rename[f"sector_{i+1}"] = f"sector_{j+1}"
+
+results.rename(rename, axis=1, inplace=True)
 
 # Write output
 if outdir is not None:

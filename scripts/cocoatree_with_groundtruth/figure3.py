@@ -3,10 +3,11 @@ import itertools
 import numpy as np
 import pandas as pd
 from utils.vis import sectors_cm
+from utils.sectors import get_best_ordered_sectors
 from plotmastery.utils_subfigure import add_letter_and_title
 from plotmastery import utils_heatmap
 
-dataset = "rhomboid"
+dataset = "DHFR"
 
 # Load precomputed results
 sca_res = pd.read_csv(f"results/cocoatree_gt/{dataset}/cocoatree_SCA_none.csv")
@@ -48,32 +49,6 @@ def compute_all_vs_all(sectors_per_method, comp1=0, comp2=0):
     return IOU_metric
 
 
-def get_best_ordered_sectors(res, dataset="halabi", type="SCA"):
-    sector_cols = [c for c in res.columns if c.startswith("sector")]
-
-    sectors = []
-    # It's not the best strategy, but just get iteratively the "best
-    # sector"
-
-    all_scores = np.zeros((len(sector_cols), len(sector_cols)))
-    for i, s in enumerate(orig_sectors):
-        for j, s1 in enumerate(sector_cols):
-            all_scores[i, j] = compute_IOU_metric(
-                    s,
-                    np.where(res[s1])[0])
-    order = all_scores.argmax(axis=1)
-    if len(np.unique(order)) != len(sector_cols):
-        order = np.arange(len(sector_cols))
-        if dataset == "halabi" and type == "NMI":
-            order = [2, 1, 0]
-        if dataset == "halabi" and type == "MI":
-            order = [1, 0, 2]
-        if dataset == "rhomboid" and type == "MI":
-            order = [0, 2, 1]
-
-    sectors = [np.where(res[sector_cols[o]])[0] for o in order]
-    return sectors
-
 
 sca_sectors = get_best_ordered_sectors(sca_res, dataset=dataset, type="SCA")
 mi_sectors = get_best_ordered_sectors(mi_res, dataset=dataset, type="MI")
@@ -86,8 +61,8 @@ all_sectors = [orig_sectors, sca_sectors, mi_sectors, nmi_sectors,
 
 n_comp = len(sca_sectors)
 
-letters = ["A", "B", "C"]
-sector_names = ["Green", "Red", "Blue"]
+letters = ["A", "B", "C", "D"]
+sector_names = ["Green", "Red", "Blue", "Purple"]
 
 vmax = None
 fig, axes = plt.subplots(figsize=(8, 8), ncols=n_comp, nrows=n_comp)

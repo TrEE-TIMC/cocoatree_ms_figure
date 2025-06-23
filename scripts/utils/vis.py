@@ -130,10 +130,11 @@ def plot_sectors(ax, results,
     Parameters
     ----------
     """
-    for i, col in enumerate(columns):
+    for col in columns:
+        i = int(col.split("_")[-1])
         sec = results[col].values[np.newaxis, :].astype(float)
         sec[sec == 0] = np.nan
-        ax.matshow(sec, aspect="auto", cmap=sectors_cm[f"sector_{i+1}"],
+        ax.matshow(sec, aspect="auto", cmap=sectors_cm[f"sector_{i}"],
                    vmin=0, vmax=1.2)
 
     ax.set_xticks([])

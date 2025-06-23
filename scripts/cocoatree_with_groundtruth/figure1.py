@@ -66,18 +66,11 @@ results = pd.read_csv(
 results = annotate_results(results)
 results = results.loc[~results["pdb_pos"].isna()]
 
-columns = ["orig_sector_1", "orig_sector_2", "orig_sector_3"]
+columns = [col for col in results.columns if col.startswith("orig_sector")]
+order = [col for col in results.columns if col.startswith("sector")]
 # Cocoatree sectors
 ax = fig.add_subplot(gs[17, :-2])
 add_letter_and_title(ax, "D.", title=dataset.capitalize())
-if dataset == "halabi":
-    order = ["sector_3", "sector_1", "sector_2"]
-elif dataset == "DHFR":
-    order = ["sector_3", "sector_1", "sector_2", "sector_4"]
-    columns = ["orig_sector_1", "orig_sector_2", "orig_sector_3",
-    "orig_sector_4"]
-else:
-    order = ["sector_2", "sector_3", "sector_1"]
 plot_sectors(ax, results, columns=order, title="cocoatree")
 
 # Original sectors
