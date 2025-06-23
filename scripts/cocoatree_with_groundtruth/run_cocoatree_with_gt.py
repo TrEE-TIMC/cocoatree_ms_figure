@@ -1,5 +1,7 @@
 import argparse
 import os
+
+import pandas as pd
 import numpy as np
 from cocoatree import datasets
 from cocoatree import perform_sca
@@ -81,3 +83,6 @@ if outdir is not None:
         outname = outname + "_none.csv"
     outname = os.path.join(outdir, outname)
     results.to_csv(outname, index=False)
+
+    outname = outname.replace(".csv", "-distance.csv")
+    pd.DataFrame(data=coevolution_matrix).to_csv(outname, index=False)
