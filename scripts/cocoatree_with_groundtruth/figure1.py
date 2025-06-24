@@ -9,8 +9,8 @@ from plotmastery.utils_subfigure import add_letter_and_title
 from utils.postprocessing import annotate_results
 
 
-fig = plt.figure(figsize=(7.5, 3.5))
-gs = GridSpec(20, 30, figure=fig, top=0.9, left=0.1)
+fig = plt.figure(figsize=(7.5, 4.2))
+gs = GridSpec(38, 30, figure=fig, top=0.9, left=0.1)
 
 ###############################################################################
 # Start with halabi results
@@ -19,7 +19,7 @@ results = annotate_results(results)
 
 ax = fig.add_subplot(gs[:12, :8])
 plot_scatter_sectors(ax, results, "IC1", "IC2", annotate=False)
-add_letter_and_title(ax, "A.", "Halabi")
+add_letter_and_title(ax, "A.", "Serine protease")
 
 ###############################################################################
 # rhomboid results
@@ -46,12 +46,12 @@ add_letter_and_title(ax, "C.", "DHFR")
 
 legend = create_legend()
 sec_legend = ax.legend(
-    loc=(1.05, .65), frameon=False, fontsize="x-small",
+    loc=(1.05, .5), frameon=False, fontsize="x-small",
     handles=legend["sectors"], title="Sectors",
     title_fontproperties={"weight": "bold",
                           "size": "small"},
     alignment="left")
-ax.legend(loc=(1.05, .1), frameon=False, fontsize="x-small",
+ax.legend(loc=(1.05, -0.3), frameon=False, fontsize="x-small",
           handles=legend["methods"], title="Methods",
           title_fontproperties={"weight": "bold",
                                 "size": "small"},
@@ -60,6 +60,42 @@ ax.add_artist(sec_legend)
 
 ###############################################################################
 # Mapping between all
+shift = 8
+start_i = 19
+dataset = "halabi"
+results = pd.read_csv(
+    f"results/cocoatree_gt/{dataset}/cocoatree_SCA_none.csv")
+results = annotate_results(results)
+results = results.loc[~results["pdb_pos"].isna()]
+
+columns = [col for col in results.columns if col.startswith("orig_sector")]
+order = [col for col in results.columns if col.startswith("sector")]
+# Cocoatree sectors
+ax = fig.add_subplot(gs[start_i, :-2])
+add_letter_and_title(ax, "D.", title="Serine protease")
+plot_sectors(ax, results, columns=order, title="cocoatree")
+
+# Original sectors
+ax = fig.add_subplot(gs[start_i+1, :-2])
+plot_sectors(ax, results,
+             columns=columns,
+             title="orig")
+
+# Both
+ax = fig.add_subplot(gs[start_i+2, :-2])
+diff = results["is_both"].values[np.newaxis, :].astype(float)
+ax.matshow(diff, aspect="auto", cmap="Greys")
+ax.set_yticks([0])
+ax.set_yticklabels(["both"], fontweight="bold")
+ax.tick_params(axis='both', which='both', labelsize='x-small',
+               bottom=True, top=False, labeltop=False, labelbottom=True,
+               left=False, right=False, labelleft=False, labelright=True)
+ax.xaxis.set_major_locator(plt.MaxNLocator(5))
+#ax.set_xlabel("Position in PDB", fontweight="bold", fontsize="small",
+#              labelpad=2)
+
+start_i += shift
+
 dataset = "rhomboid"
 results = pd.read_csv(
     f"results/cocoatree_gt/{dataset}/cocoatree_SCA_none.csv")
@@ -69,18 +105,52 @@ results = results.loc[~results["pdb_pos"].isna()]
 columns = [col for col in results.columns if col.startswith("orig_sector")]
 order = [col for col in results.columns if col.startswith("sector")]
 # Cocoatree sectors
-ax = fig.add_subplot(gs[17, :-2])
-add_letter_and_title(ax, "D.", title=dataset.capitalize())
+ax = fig.add_subplot(gs[start_i, :-2])
+add_letter_and_title(ax, "E.", title="Rhomboid")
 plot_sectors(ax, results, columns=order, title="cocoatree")
 
 # Original sectors
-ax = fig.add_subplot(gs[18, :-2])
+ax = fig.add_subplot(gs[start_i+1, :-2])
 plot_sectors(ax, results,
              columns=columns,
              title="orig")
 
 # Both
-ax = fig.add_subplot(gs[19, :-2])
+ax = fig.add_subplot(gs[start_i+2, :-2])
+diff = results["is_both"].values[np.newaxis, :].astype(float)
+ax.matshow(diff, aspect="auto", cmap="Greys")
+ax.set_yticks([0])
+ax.set_yticklabels(["both"], fontweight="bold")
+ax.tick_params(axis='both', which='both', labelsize='x-small',
+               bottom=True, top=False, labeltop=False, labelbottom=True,
+               left=False, right=False, labelleft=False, labelright=True)
+ax.xaxis.set_major_locator(plt.MaxNLocator(5))
+#ax.set_xlabel("Position in PDB", fontweight="bold", fontsize="small",
+#              labelpad=2)
+
+start_i += shift
+
+dataset = "DHFR"
+results = pd.read_csv(
+    f"results/cocoatree_gt/{dataset}/cocoatree_SCA_none.csv")
+results = annotate_results(results)
+results = results.loc[~results["pdb_pos"].isna()]
+
+columns = [col for col in results.columns if col.startswith("orig_sector")]
+order = [col for col in results.columns if col.startswith("sector")]
+# Cocoatree sectors
+ax = fig.add_subplot(gs[start_i, :-2])
+add_letter_and_title(ax, "F.", title="DHFR")
+plot_sectors(ax, results, columns=order, title="cocoatree")
+
+# Original sectors
+ax = fig.add_subplot(gs[start_i+1, :-2])
+plot_sectors(ax, results,
+             columns=columns,
+             title="orig")
+
+# Both
+ax = fig.add_subplot(gs[start_i+2, :-2])
 diff = results["is_both"].values[np.newaxis, :].astype(float)
 ax.matshow(diff, aspect="auto", cmap="Greys")
 ax.set_yticks([0])
@@ -91,6 +161,9 @@ ax.tick_params(axis='both', which='both', labelsize='x-small',
 ax.xaxis.set_major_locator(plt.MaxNLocator(5))
 ax.set_xlabel("Position in PDB", fontweight="bold", fontsize="small",
               labelpad=2)
+
+
+
 
 os.makedirs("figures", exist_ok=True)
 fig.savefig("figures/figure_1.pdf")

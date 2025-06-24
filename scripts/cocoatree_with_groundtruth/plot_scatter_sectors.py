@@ -25,8 +25,11 @@ n_comp = len(sca_sectors)
 
 fig, axes = plt.subplots(
     nrows=(n_comp-1), ncols=(n_comp-1),
-    figsize=(8, 8))
+    figsize=(4, 4))
 
+
+coevolution_metric = filename.split("_")[-2]
+correction = filename.split("_")[-1].split(".")[0]
 
 for i in range(n_comp):
     for j in range(n_comp):
@@ -52,7 +55,10 @@ for i in range(n_comp):
         ax.spines['top'].set_color('none')
         ax.spines['right'].set_color('none')
 
-fig.suptitle(filename.split("/")[-2], fontweight="bold")
+title = coevolution_metric
+if correction != None:
+    title = title + f" ({correction})"
+fig.suptitle(coevolution_metric, fontweight="bold", fontsize="small")
 
 if outname is not None:
     os.makedirs(os.path.dirname(outname), exist_ok=True)

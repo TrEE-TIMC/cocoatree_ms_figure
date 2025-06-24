@@ -95,9 +95,13 @@ n_comp = len(sca_sectors)
 letters = ["A", "B", "C", "D", "E", "F"]
 sector_names = ["Green", "Red", "Blue", "Purple", "Crimson", "Orange"]
 
-vmax = None
+cmaps = list(sectors_cm.values())
 fig, axes = plt.subplots(figsize=(8, 8), ncols=n_comp, nrows=n_comp)
 for i, j in itertools.product(range(n_comp), range(n_comp)):
+    if i != j:
+        cmap = "Grays"
+    else:
+        cmap = cmaps[i]
 
     ax = axes[i, j]
     if i > j:
@@ -105,9 +109,7 @@ for i, j in itertools.product(range(n_comp), range(n_comp)):
         continue
 
     IOU_metric_comp1 = compute_all_vs_all(all_sectors, comp1=i, comp2=j)
-    if vmax is None:
-        vmax = IOU_metric_comp1.max()
-    m = ax.matshow(IOU_metric_comp1, vmin=0, vmax=vmax, cmap="Oranges")
+    m = ax.matshow(IOU_metric_comp1, vmin=0, cmap=cmap)
     utils_heatmap.annotate_heatmap(
         m, valfmt="{x:1.0f}",
         fontsize="x-small")
@@ -130,7 +132,6 @@ os.makedirs(f"figures/{dataset}", exist_ok=True)
 fig.savefig(f"figures/{dataset}/confusion_all.pdf")
 fig.savefig(f"figures/{dataset}/confusion_all.png")
 
-cmaps = list(sectors_cm.values())
 if dataset == "rivoire":
     fig, axes = plt.subplots(figsize=(16, 3), ncols=n_comp,
                              tight_layout=True)
