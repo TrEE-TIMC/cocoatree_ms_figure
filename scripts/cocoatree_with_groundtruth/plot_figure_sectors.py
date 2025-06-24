@@ -81,7 +81,7 @@ ax.tick_params(axis='both', which='both', labelsize='x-small',
 
 ax1.tick_params(axis='both', which='both', labelsize='x-small',
                 bottom=True, top=False, labeltop=False, labelbottom=True,
-                left=False, right=False, labelleft=False, labelright=True,
+                left=False, right=True, labelleft=False, labelright=True,
                 labelcolor="gray")
 ax1.set_ylabel("% gaps", fontweight="bold", fontsize="small", color="gray")
 ax.set_ylabel("Conservation", fontweight="bold", fontsize="small")
