@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 from cocoatree import datasets
 from cocoatree import perform_sca
+from cocoatree.statistics import position
 
 from utils.sectors import get_best_ordered_sectors
 
@@ -35,6 +36,9 @@ elif dataset == "DHFR":
 n_components = len([k for k in data["sector_positions"].keys()])
 if dataset == "rhomboid":
     n_components = 3
+
+# Compute conservation
+conservation = position.compute_conservation(data["alignment"])
 
 # Perform cocoatree analysis
 coevolution_matrix, results = perform_sca(
@@ -87,6 +91,12 @@ for i, j in enumerate(order):
     rename[f"IC{j+1}"] = f"IC{i+1}"
     rename[f"sector_{j+1}"] = f"sector_{i+1}"
 results.rename(rename, axis=1, inplace=True)
+
+# Add statistics on the MSA such as conservation / number of gaps
+results["msa_conservation"] = conservation
+al = np.array([[pos for pos in seq] for seq in data["alignment"]])
+perc_gap = (al == "-").sum(axis=0) / len(al) * 100
+results["msa_perc_gap"] = perc_gap
 
 # Write output
 if outdir is not None:

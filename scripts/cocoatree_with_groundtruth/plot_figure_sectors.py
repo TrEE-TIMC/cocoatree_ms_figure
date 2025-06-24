@@ -15,8 +15,8 @@ args = parser.parse_args()
 dataset = args.dataset
 
 
-fig = plt.figure(figsize=(7.5, 5.55))
-gs = GridSpec(30, 40, figure=fig, top=0.9, left=0.1)
+fig = plt.figure(figsize=(7.5, 6))
+gs = GridSpec(40, 40, figure=fig, top=0.9, left=0.1)
 
 extensions = ["cocoatree_SCA_none.csv",
               "cocoatree_MI_none.csv",
@@ -64,6 +64,36 @@ for i, ext in enumerate(extensions):
 
     start_i += 8
 
+ax = fig.add_subplot(gs[start_i:, :-2])
+
+ax1 = ax.twinx()
+ax.plot(np.arange(results.shape[0]), results["msa_conservation"],
+        color="black", label="conservation")
+ax1.plot(np.arange(results.shape[0]), results["msa_perc_gap"], color="gray",
+        label="Percentage gaps")
+ax.spines["top"].set_linewidth(0)
+ax.spines["right"].set_linewidth(0)
+ax1.spines["top"].set_linewidth(0)
+
+ax.tick_params(axis='both', which='both', labelsize='x-small',
+               bottom=True, top=False, labeltop=False, labelbottom=True,
+               left=True, right=False, labelleft=True, labelright=False)
+
+ax1.tick_params(axis='both', which='both', labelsize='x-small',
+                bottom=True, top=False, labeltop=False, labelbottom=True,
+                left=False, right=False, labelleft=False, labelright=True,
+                labelcolor="gray")
+ax1.set_ylabel("% gaps", fontweight="bold", fontsize="small", color="gray")
+ax.set_ylabel("Conservation", fontweight="bold", fontsize="small")
+
+
+ax.xaxis.set_major_locator(plt.MaxNLocator(5))
+
+ax.set_xlabel("Position in PDB", fontweight="bold", fontsize="small",
+                labelpad=2)
+ax.set_xlim((0, len(results)))
+
+add_letter_and_title(ax,"E.", title="Conservation and gaps")
 
 os.makedirs(f"figures/{dataset}", exist_ok=True)
 fig.savefig(f"figures/{dataset}/sectors_pdb.png")
