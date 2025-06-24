@@ -79,7 +79,8 @@ for sector_id in range(n_components):
 # Now reorder based on best match to original results
 
 order = get_best_ordered_sectors(results, dataset=dataset,
-                                 type=coevolution_metric)
+                                 type=coevolution_metric,
+                                 correction=correction)
 rename = {}
 for i, j in enumerate(order):
     rename[f"PC{j+1}"] = f"PC{i+1}"

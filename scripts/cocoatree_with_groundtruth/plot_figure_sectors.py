@@ -2,17 +2,22 @@ import matplotlib.pyplot as plt
 import os
 import numpy as np
 import pandas as pd
-from utils.vis import plot_scatter_sectors, create_legend
 from utils.vis import plot_sectors
 from matplotlib.gridspec import GridSpec
 from plotmastery.utils_subfigure import add_letter_and_title
 from utils.postprocessing import annotate_results
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("dataset")
+args = parser.parse_args()
+
+dataset = args.dataset
 
 
 fig = plt.figure(figsize=(7.5, 5.55))
 gs = GridSpec(30, 40, figure=fig, top=0.9, left=0.1)
 
-dataset = "rhomboid"
 extensions = ["cocoatree_SCA_none.csv",
               "cocoatree_MI_none.csv",
               "cocoatree_NMI_none.csv",
@@ -29,7 +34,10 @@ for i, ext in enumerate(extensions):
     results = results.loc[~results["pdb_pos"].isna()]
 
     columns = [col for col in results.columns if col.startswith("orig_sector")]
-    order = [col for col in results.columns if col.startswith("sector")]
+    order = [col for col in results.columns if
+             col.startswith("sector")]
+    order.sort()
+    
     # Cocoatree sectors
     ax = fig.add_subplot(gs[start_i, :-2])
     add_letter_and_title(ax, letters[i], title=titles[i])
@@ -38,8 +46,8 @@ for i, ext in enumerate(extensions):
     # Original sectors
     ax = fig.add_subplot(gs[start_i+1, :-2])
     plot_sectors(ax, results,
-                columns=columns,
-                title="orig")
+                 columns=columns,
+                 title="orig")
 
     # Both
     ax = fig.add_subplot(gs[start_i+2, :-2])
@@ -48,10 +56,15 @@ for i, ext in enumerate(extensions):
     ax.set_yticks([0])
     ax.set_yticklabels(["both"], fontweight="bold")
     ax.tick_params(axis='both', which='both', labelsize='x-small',
-                bottom=True, top=False, labeltop=False, labelbottom=True,
-                left=False, right=False, labelleft=False, labelright=True)
+                   bottom=True, top=False, labeltop=False, labelbottom=True,
+                   left=False, right=False, labelleft=False, labelright=True)
     ax.xaxis.set_major_locator(plt.MaxNLocator(5))
     ax.set_xlabel("Position in PDB", fontweight="bold", fontsize="small",
-                labelpad=2)
+                  labelpad=2)
 
     start_i += 8
+
+
+os.makedirs(f"figures/{dataset}", exist_ok=True)
+fig.savefig(f"figures/{dataset}/sectors_pdb.png")
+fig.savefig(f"figures/{dataset}/sectors_pdb.pdf")

@@ -30,21 +30,27 @@ def compute_IOU_metric_all_vs_all(res):
     return all_scores
 
 
-def get_best_ordered_sectors(res, dataset="halabi", type="SCA"):
+def get_best_ordered_sectors(res, dataset="halabi", type="SCA",
+                             correction=None):
     sector_cols = [c for c in res.columns if c.startswith("sector")]
 
     all_scores = compute_IOU_metric_all_vs_all(res)
 
     order = all_scores.argmax(axis=1)
     if dataset == "halabi" and type == "NMI":
-        order = [2, 1, 0]
-    if dataset == "halabi" and type == "MI":
-        order = [1, 0, 2]
-    if dataset == "rhomboid" and type == "MI":
+        order = [0, 1, 2]
+    elif dataset == "halabi" and type == "MI":
+        order = [0, 1, 2]
+    elif dataset == "rhomboid" and type == "MI" and correction is None:
         order = [0, 2, 1]
+    elif dataset == "rhomboid" and type == "MI" and correction == "APC":
+        order = [1, 0, 2]
+    elif dataset == "DHFR" and type == "MI" and correction == "APC":
+        order = [0, 1, 3, 2]
+    elif dataset == "DHFR" and type == "NMI":
+        order = [0, 2, 1, 3]
 
     if len(np.unique(order)) != len(sector_cols):
         order = np.arange(len(sector_cols))
 
     return order
-

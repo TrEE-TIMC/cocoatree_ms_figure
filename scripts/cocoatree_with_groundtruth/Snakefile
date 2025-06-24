@@ -16,19 +16,24 @@ rule run_all:
             dataset=datasets,
             metric=coevolution_metrics,
             correction=corrections),
-        expand("images/cocoatree_gt/{dataset}/{metric}_{correction}_sectors.png",
+        expand("figures/{dataset}/sectors-ICA-{metric}_{correction}.png",
+	        dataset=datasets,
+            metric=coevolution_metrics,
+            correction=corrections),
+        expand("figures/{dataset}/sectors-PCA-{metric}_{correction}.png",
 	        dataset=datasets,
             metric=coevolution_metrics,
             correction=corrections),
         expand("figures/{dataset}/confusion_row.png",
 	        dataset=datasets),
-        expand("figures/{dataset}/confusion_row.pdf",
+        expand("figures/{dataset}/sectors_pdb.png",
 	        dataset=datasets),
 
 
 rule cocoatree:
     input:
-        script="run_cocoatree_with_gt.py"
+        script="run_cocoatree_with_gt.py",
+	utils="utils/sectors.py"
     output: "results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv"
     shell: """
     python {input.script} {wildcards.dataset} \
@@ -37,13 +42,26 @@ rule cocoatree:
     """
 
 
-rule plot_sectors:
+rule plot_sectors_ICA:
     input:
-        script="plot_sectors.py",
+        script="plot_scatter_sectors.py",
         res="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv"
-    output: "images/cocoatree_gt/{dataset}/{metric}_{correction}_sectors.png"
+    output: 
+        png="figures/{dataset}/sectors-ICA-{metric}_{correction}.png",
+        pdf="figures/{dataset}/sectors-ICA-{metric}_{correction}.pdf"
     shell: """
-    python {input.script} {input.res} -o {output}
+    python {input.script} {input.res} -o {output.png}
+    """
+
+rule plot_sectors_PCA:
+    input:
+        script="plot_scatter_sectors.py",
+        res="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv"
+    output: 
+        png="figures/{dataset}/sectors-PCA-{metric}_{correction}.png",
+        pdf="figures/{dataset}/sectors-PCA-{metric}_{correction}.pdf",
+    shell: """
+    python {input.script} {input.res} --pca -o {output.png}
     """
 
 
@@ -66,6 +84,18 @@ rule plot_confusion_matrix:
     output:
         png="figures/{dataset}/confusion_row.png",
         pdf="figures/{dataset}/confusion_row.pdf"
+    shell: """
+    python {input.script} {wildcards.dataset}
+    """
+
+
+rule plot_sectors_along_pdb:
+    input:
+        all_res=all_res,
+	script="plot_figure_sectors.py"
+    output:
+        png="figures/{dataset}/sectors_pdb.png",
+        pdf="figures/{dataset}/sectors_pdb.pdf",
     shell: """
     python {input.script} {wildcards.dataset}
     """
