@@ -26,6 +26,7 @@ def plot_scatter_sectors(ax, results, ica, icb, annotate=True,
         marker=".",
         linewidth=0,
         markersize=4,
+        zorder=1,
         color=colors["default"],)
 
     sectors_columns = [c for c in results.columns if c.startswith("sector")]
@@ -44,6 +45,7 @@ def plot_scatter_sectors(ax, results, ica, icb, annotate=True,
             markeredgecolor=color,
             linewidth=0,
             markersize=4,
+            zorder=45,
             markerfacecolor="none",
             )
 
@@ -54,6 +56,7 @@ def plot_scatter_sectors(ax, results, ica, icb, annotate=True,
             marker="x",
             linewidth=0,
             markersize=4,
+            zorder=40,
             color=color,
             )
 
@@ -64,6 +67,7 @@ def plot_scatter_sectors(ax, results, ica, icb, annotate=True,
             marker="o",
             linewidth=0,
             markersize=4,
+            zorder=50,
             color=color)
 
         ax.tick_params(

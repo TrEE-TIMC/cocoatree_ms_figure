@@ -87,7 +87,6 @@ order = get_best_ordered_sectors(results, dataset=dataset,
                                  correction=correction)
 rename = {}
 for i, j in enumerate(order):
-    rename[f"PC{j+1}"] = f"PC{i+1}"
     rename[f"IC{j+1}"] = f"IC{i+1}"
     rename[f"sector_{j+1}"] = f"sector_{i+1}"
 results.rename(rename, axis=1, inplace=True)

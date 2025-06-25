@@ -27,7 +27,7 @@ n_comp = len(sca_sectors)
 
 fig, axes = plt.subplots(
     nrows=(n_comp-1), ncols=(n_comp-1),
-    figsize=(4, 4))
+    figsize=(4, 4), tight_layout=True)
 
 
 coevolution_metric = filename.split("_")[-2]
@@ -53,7 +53,7 @@ else:
 if correction != "none":
     title = title + f" ({correction})"
 
-
+colors = ["Green", "Red", "Blue", "Purple", "Crimson", "Orange"]
 for i in range(n_comp):
     for j in range(n_comp):
         if i <= j:
@@ -66,44 +66,19 @@ for i in range(n_comp):
         if pca:
             plot_scatter_sectors(
                 ax, results, f"PC{i+1}", f"PC{j+1}",
-                annotate=False, add_labels=False)
-            text_label = "PC"
+                annotate=False, add_labels=True)
         else:
             plot_scatter_sectors(
                 ax, results, f"IC{i+1}", f"IC{j+1}",
                 annotate=False, add_labels=False)
-            text_label = "IC"
-
-        ax.legend(frameon=False)
-        # Move the left and bottom spines to the center
-        ax.spines['left'].set_position('zero')
-        ax.spines['bottom'].set_position('zero')
+            ax.set_xlabel(colors[i], fontweight="bold", fontsize="small",
+                          labelpad=2)
+            ax.set_ylabel(colors[j], fontweight="bold", fontsize="small",
+                          labelpad=2)
 
         # Hide the top and right spines
         ax.spines['top'].set_color('none')
         ax.spines['right'].set_color('none')
-
-        for label in ax.get_xticklabels() + ax.get_yticklabels():
-            label.set_bbox(
-                dict(facecolor='white', edgecolor='None',
-                     alpha=0.65))
-
-        xmin, xmax = ax.get_xlim()
-        ymin, ymax = ax.get_ylim()
-
-        ax.text(xmin - (xmax - xmin) * 0.07,
-                0, text_label + f"{j+1}",
-                fontweight="bold", rotation=90,
-                fontsize="small",
-                horizontalalignment="center",
-                verticalalignment="center")
-        ax.text(0,
-                ymin - (ymax - ymin) * 0.07,
-                text_label + f"{i+1}",
-                fontweight="bold",
-                fontsize="small",
-                horizontalalignment="center",
-                verticalalignment="center")
 
 
 if outname is not None:
