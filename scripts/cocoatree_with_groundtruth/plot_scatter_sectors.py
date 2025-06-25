@@ -2,6 +2,8 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 import argparse
+from plotmastery.utils_subfigure import add_letter_and_title
+
 from utils.postprocessing import annotate_results
 from utils.vis import plot_scatter_sectors
 
@@ -31,6 +33,27 @@ fig, axes = plt.subplots(
 coevolution_metric = filename.split("_")[-2]
 correction = filename.split("_")[-1].split(".")[0]
 
+# Manually add letters
+if coevolution_metric == "SCA":
+    letter = "A." if pca else "B."
+elif coevolution_metric == "MI" and correction == "none":
+    letter = "D." if pca else "E."
+elif coevolution_metric == "NMI":
+    letter = "G." if pca else "H."
+elif coevolution_metric == "MI" and correction == "APC":
+    letter = "J." if pca else "K."
+else:
+    letter = None
+
+
+if pca:
+    title = f"PCA with {coevolution_metric}"
+else:
+    title = f"ICA with {coevolution_metric}"
+if correction != "none":
+    title = title + f" ({correction})"
+
+
 for i in range(n_comp):
     for j in range(n_comp):
         if i <= j:
@@ -38,14 +61,19 @@ for i in range(n_comp):
                 fig.delaxes(axes[j, i-1])
             continue
         ax = axes[j, i-1]
+        if j == 0 and i-1 == 0 and letter is not None:
+            add_letter_and_title(ax, letter, title)
         if pca:
             plot_scatter_sectors(
                 ax, results, f"PC{i+1}", f"PC{j+1}",
-                annotate=False)
+                annotate=False, add_labels=False)
+            text_label = "PC"
         else:
             plot_scatter_sectors(
                 ax, results, f"IC{i+1}", f"IC{j+1}",
-                annotate=False)
+                annotate=False, add_labels=False)
+            text_label = "IC"
+
         ax.legend(frameon=False)
         # Move the left and bottom spines to the center
         ax.spines['left'].set_position('zero')
@@ -55,10 +83,28 @@ for i in range(n_comp):
         ax.spines['top'].set_color('none')
         ax.spines['right'].set_color('none')
 
-title = coevolution_metric
-if correction != None:
-    title = title + f" ({correction})"
-fig.suptitle(coevolution_metric, fontweight="bold", fontsize="small")
+        for label in ax.get_xticklabels() + ax.get_yticklabels():
+            label.set_bbox(
+                dict(facecolor='white', edgecolor='None',
+                     alpha=0.65))
+
+        xmin, xmax = ax.get_xlim()
+        ymin, ymax = ax.get_ylim()
+
+        ax.text(xmin - (xmax - xmin) * 0.07,
+                0, text_label + f"{j+1}",
+                fontweight="bold", rotation=90,
+                fontsize="small",
+                horizontalalignment="center",
+                verticalalignment="center")
+        ax.text(0,
+                ymin - (ymax - ymin) * 0.07,
+                text_label + f"{i+1}",
+                fontweight="bold",
+                fontsize="small",
+                horizontalalignment="center",
+                verticalalignment="center")
+
 
 if outname is not None:
     os.makedirs(os.path.dirname(outname), exist_ok=True)

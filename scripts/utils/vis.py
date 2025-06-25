@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 from .colors import sectors_cm
 
 
-def plot_scatter_sectors(ax, results, ica, icb, annotate=True):
+def plot_scatter_sectors(ax, results, ica, icb, annotate=True,
+                         add_labels=True):
     """
     Plot sectors as a scatter plot
 
@@ -89,11 +90,12 @@ def plot_scatter_sectors(ax, results, ica, icb, annotate=True):
 
     ax.spines["top"].set_linewidth(0)
     ax.spines["right"].set_linewidth(0)
-
-    ax.set_xlabel(ica, fontsize="small",
-                  fontweight="bold",
-                  labelpad=2)
-    ax.set_ylabel(icb, fontsize="small", fontweight="bold", labelpad=2)
+   
+    if add_labels:
+        ax.set_xlabel(ica, fontsize="small",
+                    fontweight="bold",
+                    labelpad=2)
+        ax.set_ylabel(icb, fontsize="small", fontweight="bold", labelpad=2)
 
 
 def create_legend():
