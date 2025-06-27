@@ -99,7 +99,7 @@ cmaps = list(sectors_cm.values())
 fig, axes = plt.subplots(figsize=(8, 8), ncols=n_comp, nrows=n_comp)
 for i, j in itertools.product(range(n_comp), range(n_comp)):
     if i != j:
-        cmap = "Grays"
+        cmap = sectors_cm["others"]
     else:
         cmap = cmaps[i]
 

@@ -83,5 +83,5 @@ for i in range(n_comp):
 
 if outname is not None:
     os.makedirs(os.path.dirname(outname), exist_ok=True)
-    fig.savefig(outname)
+    fig.savefig(outname, dpi=300)
     fig.savefig(outname.replace(".png", ".pdf"))

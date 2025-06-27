@@ -12,14 +12,20 @@ from utils.postprocessing import annotate_results
 fig = plt.figure(figsize=(7.5, 4.2))
 gs = GridSpec(38, 30, figure=fig, top=0.9, left=0.1)
 
+
 ###############################################################################
 # Start with halabi results
 results = pd.read_csv("results/cocoatree_gt/halabi/cocoatree_SCA_none.csv")
 results = annotate_results(results)
 
 ax = fig.add_subplot(gs[:12, :8])
-plot_scatter_sectors(ax, results, "IC1", "IC2", annotate=False)
+plot_scatter_sectors(ax, results, "IC1", "IC2", annotate=False,
+                     add_labels=False)
+ax.set_ylabel("Red", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_xlabel("Green", fontweight="bold", fontsize="small", labelpad=2)
+
 add_letter_and_title(ax, "A.", "Serine protease")
+
 
 ###############################################################################
 # rhomboid results
@@ -27,8 +33,13 @@ results = pd.read_csv("results/cocoatree_gt/rhomboid/cocoatree_SCA_none.csv")
 results = annotate_results(results)
 
 ax = fig.add_subplot(gs[:12, 10:18])
-plot_scatter_sectors(ax, results, "IC1", "IC2", annotate=False)
+plot_scatter_sectors(ax, results, "IC1", "IC2", annotate=False,
+                     add_labels=False)
+ax.set_ylabel("Red", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_xlabel("Green", fontweight="bold", fontsize="small", labelpad=2)
+
 add_letter_and_title(ax, "B.", "Rhomboid")
+
 
 ###############################################################################
 # DHFR results
@@ -36,9 +47,13 @@ results = pd.read_csv("results/cocoatree_gt/DHFR/cocoatree_SCA_none.csv")
 results = annotate_results(results)
 
 ax = fig.add_subplot(gs[:12, 20:-2])
-plot_scatter_sectors(ax, results, "IC1", "IC2", annotate=False)
-add_letter_and_title(ax, "C.", "DHFR")
+plot_scatter_sectors(
+    ax, results, "IC1", "IC2", annotate=False,
+    add_labels=False)
+ax.set_ylabel("Red", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_xlabel("Green", fontweight="bold", fontsize="small", labelpad=2)
 
+add_letter_and_title(ax, "C.", "DHFR")
 
 
 ###############################################################################
@@ -166,4 +181,6 @@ ax.set_xlabel("Position in PDB", fontweight="bold", fontsize="small",
 
 
 os.makedirs("figures", exist_ok=True)
-fig.savefig("figures/figure_1.pdf")
+fig.savefig("figures/figure_2.pdf")
+fig.savefig("figures/figure_2.png", dpi=300)
+

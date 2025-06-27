@@ -28,6 +28,8 @@ sectors_cm = {
         "sector_5", ['white', lightcolors["sector_5"]]),
     "sector_6": LinearSegmentedColormap.from_list(
         "sector_6", ['white', lightcolors["sector_6"]]),
+    "others": LinearSegmentedColormap.from_list(
+        "other", ["white", "dimgray"]),
 
     }
 
