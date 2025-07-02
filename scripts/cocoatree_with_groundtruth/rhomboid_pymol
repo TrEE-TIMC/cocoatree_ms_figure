@@ -1,8 +1,18 @@
+fetch 2NRF, async=0
+
+hide
+bg_color white
+remove chain A
+show cartoon, chain B
+color gray
+
 python
 import numpy as np
 import pandas as pd
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
+
+path_to_script = "/home/nelle/Projects/research/2025-margaux-cocoatree/scripts/cocoatree_with_groundtruth"
 
 # #154c3b
 colors = {
@@ -18,10 +28,10 @@ colors = {
     "sector_6": "orange"}
 
 
-
-
 residue_swap = pd.read_csv(
-"/home/nelle/Projects/research/2025-margaux-cocoatree/scripts/cocoatree_with_groundtruth/results/cocoatree_gt/halabi/cocoatree_SCA_none.csv")
+    os.path.join(
+        path_to_script,
+        "results/cocoatree_gt/rhomboid/cocoatree_SCA_none.csv"))
 residue_swap = residue_swap.loc[~residue_swap["pdb_pos"].isna()]
 
 orig_columns = [c for c in residue_swap.columns if c.startswith("orig_sector_")]
