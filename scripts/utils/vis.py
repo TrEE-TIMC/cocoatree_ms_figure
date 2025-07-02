@@ -103,7 +103,7 @@ def plot_scatter_sectors(ax, results, ica, icb, annotate=True,
 
 
 def create_legend():
-    sector_colors = ["Green", "Red", "Blue", "Purple", "Crimson"]
+    sector_colors = ["Red", "Green", "Blue", "Purple", "Crimson"]
     sectors = [
         Line2D([0], [0], linewidth=0, marker='o', color=colors[f"sector_{i}"],
                label=f"{sector_colors[i-1]} sector",

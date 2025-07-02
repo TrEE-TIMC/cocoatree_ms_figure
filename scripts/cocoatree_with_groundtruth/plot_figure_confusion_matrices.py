@@ -62,7 +62,7 @@ all_sectors = [orig_sectors, sca_sectors, mi_sectors, nmi_sectors,
 n_comp = len(sca_sectors)
 
 letters = ["A", "B", "C", "D", "E", "F"]
-sector_names = ["Green", "Red", "Blue", "Purple", "Crimson", "Orange"]
+sector_names = ["Red", "Green", "Blue", "Purple", "Crimson", "Orange"]
 
 cmaps = list(sectors_cm.values())
 fig, axes = plt.subplots(figsize=(8, 8), ncols=n_comp, nrows=n_comp)
