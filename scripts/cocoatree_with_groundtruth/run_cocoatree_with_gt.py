@@ -4,7 +4,8 @@ import os
 import pandas as pd
 import numpy as np
 from cocoatree import datasets
-from cocoatree import perform_sca, substract_first_principal_component
+from cocoatree import perform_sca
+from cocoatree.deconvolution import substract_first_principal_component
 from cocoatree.statistics import position
 
 from utils.sectors import get_best_ordered_sectors
