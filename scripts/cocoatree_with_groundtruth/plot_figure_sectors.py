@@ -96,5 +96,5 @@ ax.set_xlim((0, len(results)))
 add_letter_and_title(ax,"E.", title="Conservation and gaps")
 
 os.makedirs(f"figures/{dataset}", exist_ok=True)
-fig.savefig(f"figures/{dataset}/sectors_pdb.png")
+fig.savefig(f"figures/{dataset}/sectors_pdb.png", dpi=300)
 fig.savefig(f"figures/{dataset}/sectors_pdb.pdf")

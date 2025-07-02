@@ -2,6 +2,8 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 import argparse
+from plotmastery.utils_subfigure import add_letter_and_title
+
 from utils.postprocessing import annotate_results
 from utils.vis import plot_scatter_sectors
 
@@ -25,12 +27,33 @@ n_comp = len(sca_sectors)
 
 fig, axes = plt.subplots(
     nrows=(n_comp-1), ncols=(n_comp-1),
-    figsize=(4, 4))
+    figsize=(4, 4), tight_layout=True)
 
 
 coevolution_metric = filename.split("_")[-2]
 correction = filename.split("_")[-1].split(".")[0]
 
+# Manually add letters
+if coevolution_metric == "SCA":
+    letter = "A." if pca else "B."
+elif coevolution_metric == "MI" and correction == "none":
+    letter = "D." if pca else "E."
+elif coevolution_metric == "NMI":
+    letter = "G." if pca else "H."
+elif coevolution_metric == "MI" and correction == "APC":
+    letter = "J." if pca else "K."
+else:
+    letter = None
+
+
+if pca:
+    title = f"PCA with {coevolution_metric}"
+else:
+    title = f"ICA with {coevolution_metric}"
+if correction != "none":
+    title = title + f" ({correction})"
+
+colors = ["Green", "Red", "Blue", "Purple", "Crimson", "Orange"]
 for i in range(n_comp):
     for j in range(n_comp):
         if i <= j:
@@ -38,29 +61,27 @@ for i in range(n_comp):
                 fig.delaxes(axes[j, i-1])
             continue
         ax = axes[j, i-1]
+        if j == 0 and i-1 == 0 and letter is not None:
+            add_letter_and_title(ax, letter, title)
         if pca:
             plot_scatter_sectors(
                 ax, results, f"PC{i+1}", f"PC{j+1}",
-                annotate=False)
+                annotate=False, add_labels=True)
         else:
             plot_scatter_sectors(
                 ax, results, f"IC{i+1}", f"IC{j+1}",
-                annotate=False)
-        ax.legend(frameon=False)
-        # Move the left and bottom spines to the center
-        ax.spines['left'].set_position('zero')
-        ax.spines['bottom'].set_position('zero')
+                annotate=False, add_labels=False)
+            ax.set_xlabel(colors[i], fontweight="bold", fontsize="small",
+                          labelpad=2)
+            ax.set_ylabel(colors[j], fontweight="bold", fontsize="small",
+                          labelpad=2)
 
         # Hide the top and right spines
         ax.spines['top'].set_color('none')
         ax.spines['right'].set_color('none')
 
-title = coevolution_metric
-if correction != None:
-    title = title + f" ({correction})"
-fig.suptitle(coevolution_metric, fontweight="bold", fontsize="small")
 
 if outname is not None:
     os.makedirs(os.path.dirname(outname), exist_ok=True)
-    fig.savefig(outname)
+    fig.savefig(outname, dpi=300)
     fig.savefig(outname.replace(".png", ".pdf"))

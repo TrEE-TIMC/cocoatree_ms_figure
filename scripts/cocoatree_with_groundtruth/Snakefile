@@ -1,7 +1,7 @@
 from glob import glob
 import itertools
 
-datasets =  ["halabi", "rivoire", "rhomboid", "DHFR"]
+datasets =  ["halabi", "rhomboid", "DHFR"]
 coevolution_metrics = ["SCA", "MI", "NMI"]
 corrections = ["none", "APC", "entropy"]
 
@@ -36,6 +36,7 @@ rule cocoatree:
 	utils="utils/sectors.py"
     output: "results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv"
     shell: """
+    mkdir -p ../results
     python {input.script} {wildcards.dataset} \
         -m {wildcards.metric} \
         -c {wildcards.correction} -o $(dirname {output})

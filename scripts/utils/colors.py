@@ -8,8 +8,8 @@ lightcolors = {
     "both": "#006ab2",
     "default": "#9cadbc",
     "sector_2": "#AB0000",
-    "sector_3": "#006ab2",
-    "sector_1": "#006c4b",
+    "sector_3": "#0023B2", #"#006ab2",
+    "sector_1": "#078400", #"#006c4b",
     "sector_4": "#845EC2",
     "sector_5": "crimson",
     "sector_6": "orange"}
@@ -28,6 +28,8 @@ sectors_cm = {
         "sector_5", ['white', lightcolors["sector_5"]]),
     "sector_6": LinearSegmentedColormap.from_list(
         "sector_6", ['white', lightcolors["sector_6"]]),
+    "others": LinearSegmentedColormap.from_list(
+        "other", ["white", "dimgray"]),
 
     }
 
