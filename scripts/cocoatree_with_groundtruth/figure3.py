@@ -62,7 +62,7 @@ for j, dataset in enumerate(datasets):
     n_comp = len(sca_sectors)
 
     letters = ["A.", "B.", "C.", "D."]
-    sector_names = ["Green", "Red", "Blue", "Purple"]
+    sector_names = ["Red", "Green", "Blue", "Purple"]
 
     for i in range(n_comp):
 
@@ -89,12 +89,12 @@ for j, dataset in enumerate(datasets):
 add_letter_and_title(
     axes[0][0],
     letters[0],
-    "Green sector")
+    "Red sector")
 
 add_letter_and_title(
     axes[0][1],
     letters[1],
-    "Red sector")
+    "Green sector")
 
 add_letter_and_title(
     axes[0][2],

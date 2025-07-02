@@ -53,7 +53,7 @@ else:
 if correction != "none":
     title = title + f" ({correction})"
 
-colors = ["Green", "Red", "Blue", "Purple", "Crimson", "Orange"]
+colors = ["Red", "Green", "Blue", "Purple", "Crimson", "Orange"]
 for i in range(n_comp):
     for j in range(n_comp):
         if i <= j:
