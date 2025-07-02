@@ -4,7 +4,7 @@ import os
 import pandas as pd
 import numpy as np
 from cocoatree import datasets
-from cocoatree import perform_sca
+from cocoatree import perform_sca, substract_first_principal_component
 from cocoatree.statistics import position
 
 from utils.sectors import get_best_ordered_sectors
@@ -46,6 +46,10 @@ coevolution_matrix, results = perform_sca(
     n_components=n_components,
     coevolution_metric=coevolution_metric,
     correction=correction)
+
+# Remove global mode
+coevolution_matrix_ngm = substract_first_principal_component(
+    coevolution_matrix)
 
 # Add original sectors to the results files
 sectors = [
@@ -111,3 +115,6 @@ if outdir is not None:
 
     outname = outname.replace(".csv", "-distance.csv")
     pd.DataFrame(data=coevolution_matrix).to_csv(outname, index=False)
+
+    outname = outname.replace(".csv", "_ngm.csv")
+    pd.DataFrame(data=coevolution_matrix_ngm).to_csv(outname, index=False)

@@ -99,3 +99,14 @@ rule plot_sectors_along_pdb:
     shell: """
     python {input.script} {wildcards.dataset}
     """
+
+
+rule plot_coevolution_matrix:
+    input:
+        script="plot_coevolution_matrix_sectors.py"
+    output:
+        png="figures/{dataset}/coevolution_matrix_sectors.png",
+        pdf="figures/{dataset}/coevolution_matrix_sectors.pdf",
+    shell: """
+    python {input.script} {wildcards.dataset}
+    """
