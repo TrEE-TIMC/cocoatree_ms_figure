@@ -12,10 +12,10 @@ Here are the scripts/results:
       the coevolution matrix in the same directory / filename but with
       `-distances.csv`
 
-    - `plot_sectors.py`  plots the results of the IC with sectors colors +
+    - `plot_scatter_sectors.py`  plots the results of the IC with sectors colors +
       groundtruth when known.
 
-    - `plot_figures_confusion_matrices.py`  plots the confusion matrix (both
+    - `plot_figure_confusion_matrices.py`  plots the confusion matrix (both
       row and all vs all formats)
 
 All results are generated when typing snakemake -c {njobs}.
