@@ -12,26 +12,17 @@ import pandas as pd
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 
-path_to_script = "/home/nelle/Projects/research/2025-margaux-cocoatree/scripts/cocoatree_with_groundtruth"
+import sys
 
-# #154c3b
-colors = {
-    "cocoatree": "#AB0000",
-    "other": "#006c4b",
-    "both": "#006ab2",
-    "default": "#9cadbc",
-    "sector_1": "#AB0000", # Red
-    "sector_3": "#0023B2", #"#006ab2", # Green
-    "sector_2": "#078400", #"#006c4b", # Blue
-    "sector_4": "#845EC2",
-    "sector_5": "crimson",
-    "sector_6": "orange"}
+path_to_script = "/home/nelle/Projects/research/2025-margaux-cocoatree/scripts/cocoatree_with_groundtruth"
+sys.path.append(path_to_script)
+
+from utils.colors import sectors_cm
 
 
 residue_swap = pd.read_csv(
     os.path.join(
-        path_to_script,
-        "results/cocoatree_gt/rhomboid/cocoatree_SCA_none.csv"))
+        path_to_script, "results/cocoatree_gt/halabi/cocoatree_SCA_none.csv"))
 residue_swap = residue_swap.loc[~residue_swap["pdb_pos"].isna()]
 
 orig_columns = [c for c in residue_swap.columns if c.startswith("orig_sector_")]
@@ -40,17 +31,24 @@ columns.sort()
 
 residue_lists = [
     residue_swap.loc[residue_swap[c], "pdb_named_pos"].to_numpy()
-    for c in orig_columns]
+    for c in columns]
+residue_weights = [
+    residue_swap.loc[residue_swap[col], f"IC{col.split('_')[-1]}"].to_numpy()
+    for col in columns]
 
+for s, residue_pos in enumerate(residue_lists):
 
-for i, residue_pos in enumerate(residue_lists):
-    color = colors[f"sector_{i+1}"]
-    r, g, b = mcolors.to_rgb(color)
+    # Normalize residue weights
+    weights = residue_weights[s]
+    weights /= weights.max()
+
+    colors = sectors_cm[f"sector_{s+1}"](weights)
 
     for i in range(len(residue_pos)):
+        r, g, b, _ = colors[i]
         residue = residue_pos[i]
 
-        color_name = f"residue_{residue}"
+        color_name = f"residue_{s}_{residue}"
         cmd.set_color(color_name, [r, g, b])
         cmd.color(color_name, f"resi {residue}")
         cmd.show("spheres", f"resi {residue}")

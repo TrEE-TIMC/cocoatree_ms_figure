@@ -3,7 +3,7 @@ fetch 3TGI, async=0
 hide
 show cartoon
 bg_color white
-color gray
+color gray80
 
 set_view (\
     -0.658013046,   -0.737063110,   -0.154135883,\
@@ -42,10 +42,16 @@ residue_weights = [
     residue_swap.loc[residue_swap[col], f"IC{col.split('_')[-1]}"].to_numpy()
     for col in columns]
 
+sectors_to_plot = [0, 1, 2]
+sectors_to_plot = [1]
+
 for s, residue_pos in enumerate(residue_lists):
+    if s not in sectors_to_plot:
+        continue
 
     # Normalize residue weights
     weights = residue_weights[s]
+    weights -= weights.min()
     weights /= weights.max()
 
     colors = sectors_cm[f"sector_{s+1}"](weights)
