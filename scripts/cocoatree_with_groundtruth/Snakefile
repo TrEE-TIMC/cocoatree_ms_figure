@@ -28,6 +28,8 @@ rule run_all:
 	        dataset=datasets),
         expand("figures/{dataset}/sectors_pdb.png",
 	        dataset=datasets),
+        expand("figures/{dataset}/coevolution_matrix_sectors.png",
+            dataset=datasets)
 
 
 rule cocoatree:
