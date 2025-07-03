@@ -94,11 +94,11 @@ def plot_scatter_sectors(ax, results, ica, icb, annotate=True,
 
     ax.spines["top"].set_linewidth(0)
     ax.spines["right"].set_linewidth(0)
-   
+
     if add_labels:
         ax.set_xlabel(ica, fontsize="small",
-                    fontweight="bold",
-                    labelpad=2)
+                      fontweight="bold",
+                      labelpad=2)
         ax.set_ylabel(icb, fontsize="small", fontweight="bold", labelpad=2)
 
 
@@ -152,3 +152,51 @@ def plot_sectors(ax, results,
     ax.tick_params(axis='both', which='both', labelsize='x-small',
                    bottom=False, top=False, labeltop=False, labelbottom=False,
                    left=False, right=False, labelleft=False, labelright=True)
+
+
+def plot_coev_mat_sectors(fig, ax, results, coev_mat, title=""):
+    """
+    Plot coevolution matrix of sectors
+
+    Parameters
+    ----------
+    fig : matplotlib.Axes object
+
+    ax : matplotlib.Axes object
+
+    results :
+
+    coev_mat :
+    """
+
+    # Get the number of sectors
+    # /!\ depends on the structure of the results file
+    num_sectors = int((len(results.columns) - 11)/4)
+    sectors_list = []
+    for sect in range(1, num_sectors+1):
+        col_name = str("sector_" + str(sect))
+        # print(col_name)
+        sect_pos = list(results.loc[results[col_name], 'filtered_msa_pos'])
+        sectors_list.append(sect_pos)
+
+    sector_sizes = [len(sec) for sec in sectors_list]
+    cumul_sizes = sum(sector_sizes)
+    sorted_pos = [s for sec in sectors_list for s in sec]
+
+    # Plot coevolution matrix
+    im = ax.imshow(coev_mat[np.ix_(sorted_pos, sorted_pos)],
+                   vmin=0, vmax=2,
+                   interpolation='none', aspect='equal',
+                   extent=[0, cumul_sizes, 0, cumul_sizes], cmap='inferno')
+    ax.set_title(f"{title}", fontweight='bold')
+    cb = fig.colorbar(im)
+    cb.set_label("coevolution level")
+
+    line_index = 0
+    for i in range(num_sectors):
+        ax.plot([line_index + sector_sizes[i], line_index + sector_sizes[i]],
+                [0, cumul_sizes], 'w', linewidth=2)
+        ax.plot([0, cumul_sizes],
+                [cumul_sizes - line_index, cumul_sizes - line_index],
+                'w', linewidth=2)
+        line_index += sector_sizes[i]
