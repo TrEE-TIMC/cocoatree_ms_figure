@@ -37,7 +37,7 @@ columns.sort()
 
 residue_lists = [
     residue_swap.loc[residue_swap[c], "pdb_named_pos"].to_numpy()
-    for c in orig_columns]
+    for c in columns]
 residue_weights = [
     residue_swap.loc[residue_swap[col], f"IC{col.split('_')[-1]}"].to_numpy()
     for col in columns]
