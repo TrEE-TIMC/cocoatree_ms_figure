@@ -54,6 +54,7 @@ Files:
 - data_S3.xlsx = mutations that were tested for the sector grafting experiment
 - rhomboid_Uniprot_metadata.tsv = metadata extracted from Uniprot using the sequence identifiers in the alignment.
 /!\ Beware: the taxonomy column doesn't always have the same number of separators as there are more categories for eukaryotes than for prokaryotes /!\
+- rhomboid_metadata_clean.csv = clean taxonomy extracted from rhomboid_Uniprot_metadata.tsv
 - rhomboid_sectors.npz = two np.arrays of the sectors identified in the paper. I extracted the positions from the supplementary data of the paper (Data S2), they do not precise whether it's on E. coli or H. influenzae... but the position indexes seem more in line with E. coli PDB numbering so I would go with that.
 
 
