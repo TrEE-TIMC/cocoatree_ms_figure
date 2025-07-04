@@ -7,6 +7,7 @@ from cocoatree import datasets
 from cocoatree import perform_sca
 from cocoatree.deconvolution import substract_first_principal_component
 from cocoatree.statistics import position
+from cocoatree.io import export_fasta
 
 from utils.sectors import get_best_ordered_sectors
 
@@ -118,3 +119,25 @@ if outdir is not None:
 
     outname = outname.replace(".csv", "_ngm.csv")
     pd.DataFrame(data=coevolution_matrix_ngm).to_csv(outname, index=False)
+
+# Output sector sequences as fasta files
+for sect in range(1, n_components+1):
+    col_name = 'sector_' + str(sect)
+    sect_pos_list = results.loc[results[col_name], ['original_msa_pos']]
+    sect_pos_list = sect_pos_list['original_msa_pos'].to_list()
+    sector = []
+    for sequence in range(len(data['sequence_ids'])):
+        seq = ''
+        for pos in sect_pos_list:
+            seq += data['alignment'][sequence][pos]
+        sector.append(seq)
+
+    if outdir is not None:
+        os.makedirs(outdir, exist_ok=True)
+        outname = f"cocoatree_{col_name}_{coevolution_metric}"
+        if correction is not None:
+            outname = outname + f"_{correction}.fasta"
+        else:
+            outname = outname + "_none.fasta"
+        outname = os.path.join(outdir, outname)
+        export_fasta(sector, data['sequence_ids'], outname)
