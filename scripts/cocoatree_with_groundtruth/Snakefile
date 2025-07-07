@@ -28,7 +28,7 @@ rule run_all:
 	        dataset=datasets),
         expand("figures/{dataset}/sectors_pdb.png",
 	        dataset=datasets),
-        expand("figures/{dataset}/coevolution_matrix_sectors.png",
+        expand("figures/{dataset}/coev_matrix_sectors_all_metrics.pdf",
             dataset=datasets)
 
 
@@ -106,10 +106,11 @@ rule plot_sectors_along_pdb:
 
 rule plot_coevolution_matrix:
     input:
-        script="plot_coevolution_matrix_sectors.py"
+        script="plot_coevolution_matrix_sectors.py",
+	all_res=all_res
     output:
-        png="figures/{dataset}/coevolution_matrix_sectors.png",
-        pdf="figures/{dataset}/coevolution_matrix_sectors.pdf",
+        png="figures/{dataset}/coev_matrix_sectors_all_metrics.png",
+        pdf="figures/{dataset}/coev_matrix_sectors_all_metrics.pdf",
     shell: """
     python {input.script} {wildcards.dataset}
     """
