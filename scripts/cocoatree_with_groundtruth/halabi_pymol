@@ -13,6 +13,8 @@ set_view (\
    -13.020929337,  -92.443511963,   -6.637340546,\
    134.411529541,  206.558105469,  -20.000000000 )
 
+zoom complete=0
+
 python
 import os, sys
 import numpy as np
@@ -28,8 +30,8 @@ path_to_script = "/home/varoquan/Projects/research/2025-margaux-cocoatree/script
 
 dataset = "halabi"
 metrics = ["SCA", "MI", "NMI"]
-corrections = ["none", "APC", "entropy"]
 
+corrections = ["none", "APC", "entropy"]
 
 sys.path.append(path_to_script)
 from utils.colors_and_labels import sectors_cm, labels
@@ -89,7 +91,7 @@ def plot_pymol_sectors(dataset, metric, correction, path_to_script):
 				cmd.color(color_name, f"resi {residue}")
 				cmd.show("spheres", f"resi {residue}")
 
-		cmd.ray(2400, 2400)
+		cmd.ray(2300, 2300)
 		outname = os.path.join(
 			path_to_script,
 			f"figures/{dataset}/cocoatree_{metric}_{correction}_")
@@ -100,7 +102,7 @@ def plot_pymol_sectors(dataset, metric, correction, path_to_script):
 
 
 		cmd.rotate("x", 180)
-		cmd.ray(2400, 2400)
+		cmd.ray(2300, 2300)
 		cmd.png(outname + f"{sector_name}_sector_2.png", dpi=300)
 
 
