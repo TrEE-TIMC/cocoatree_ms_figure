@@ -1,8 +1,8 @@
 import numpy as np
-from .colors import colors
+from .colors_and_labels import colors
 from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
-from .colors import sectors_cm
+from .colors_and_labels import sectors_cm, labels
 
 
 def plot_scatter_sectors(ax, results, ica, icb, annotate=True,
@@ -154,14 +154,12 @@ def plot_sectors(ax, results,
                    left=False, right=False, labelleft=False, labelright=True)
 
 
-def plot_coev_mat_sectors(fig, ax, results, coev_mat, title=""):
+def plot_coev_mat_sectors(fig, ax, results, coev_mat):
     """
     Plot coevolution matrix of sectors
 
     Parameters
     ----------
-    fig : matplotlib.Axes object
-
     ax : matplotlib.Axes object
 
     results :
@@ -171,32 +169,59 @@ def plot_coev_mat_sectors(fig, ax, results, coev_mat, title=""):
 
     # Get the number of sectors
     # /!\ depends on the structure of the results file
-    num_sectors = int((len(results.columns) - 11)/4)
+    sector_columns = [
+        col for col in results.columns if col.startswith("sector_")]
+    sector_columns.sort()
+    num_sectors = len(sector_columns)
     sectors_list = []
-    for sect in range(1, num_sectors+1):
-        col_name = str("sector_" + str(sect))
-        # print(col_name)
-        sect_pos = list(results.loc[results[col_name], 'filtered_msa_pos'])
-        sectors_list.append(sect_pos)
+    for sect in sector_columns:
+        sect_id = sect.split("_")[-1]
+        weights = results.loc[results[sect], f"IC{sect_id}"]
+        weights = weights.sort_values(ascending=False)
+        sect_pos = results.loc[weights.index, 'filtered_msa_pos']
+        sectors_list.append(sect_pos.astype(int).values)
 
     sector_sizes = [len(sec) for sec in sectors_list]
     cumul_sizes = sum(sector_sizes)
-    sorted_pos = [s for sec in sectors_list for s in sec]
+    sorted_pos = np.concat(sectors_list)
+
+    submatrix = coev_mat.loc[sorted_pos, sorted_pos].values
+    submatrix[np.diag_indices_from(submatrix)] = np.nan
+
+    # Get extent for the colorbars
+    vmax = min(2, np.nanmax(submatrix))
+    vmin = min(0, np.nanmin(submatrix))
 
     # Plot coevolution matrix
-    im = ax.imshow(coev_mat[np.ix_(sorted_pos, sorted_pos)],
-                   vmin=0, vmax=2,
+    im = ax.imshow(submatrix,
+                   vmin=vmin, vmax=vmax,
                    interpolation='none', aspect='equal',
-                   extent=[0, cumul_sizes, 0, cumul_sizes], cmap='inferno')
-    ax.set_title(f"{title}", fontweight='bold')
+                   origin="lower",
+                   extent=[0, cumul_sizes, 0, cumul_sizes], cmap='RdBu_r')
     cb = fig.colorbar(im)
-    cb.set_label("coevolution level")
+    cb.ax.tick_params(labelsize="x-small")
+    cb.ax.locator = plt.MaxNLocator(nbins=3)
+    cb.update_ticks()
+    cb.set_label("Coevolution metric", fontweight="bold")
 
     line_index = 0
+    label_index = []
     for i in range(num_sectors):
-        ax.plot([line_index + sector_sizes[i], line_index + sector_sizes[i]],
-                [0, cumul_sizes], 'w', linewidth=2)
-        ax.plot([0, cumul_sizes],
-                [cumul_sizes - line_index, cumul_sizes - line_index],
-                'w', linewidth=2)
+        ax.axvline(line_index + sector_sizes[i],
+                   color='0', linewidth=1)
+        ax.axhline(line_index + sector_sizes[i],
+                   color='0', linewidth=1)
+
+        label_index += [np.sum(line_index) + sector_sizes[i] / 2]
         line_index += sector_sizes[i]
+
+    ax.tick_params(axis='both', which='both', labelsize='small',
+                   labelright=False, labelleft=True, right=False, left=True,
+                   labeltop=False, labelbottom=True, bottom=True, top=False)
+
+    ax.set_xticks(label_index)
+    ax.set_yticks(label_index)
+    ax.set_xticklabels(labels[:len(label_index)], fontweight="bold")
+    ax.set_yticklabels(labels[:len(label_index)], fontweight="bold")
+
+    return cb

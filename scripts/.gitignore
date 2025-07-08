@@ -1,3 +1,7 @@
 results
 .snakemake
 images
+*.swp
+*.swo
+__pycache__
+.joblib

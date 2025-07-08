@@ -41,3 +41,5 @@ darkcolors = {
 }
 
 colors = lightcolors
+
+labels = ["Red", "Green", "Blue", "Purple", "Crimson", "Orange"]

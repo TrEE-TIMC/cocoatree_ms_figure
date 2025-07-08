@@ -1,73 +1,41 @@
-import matplotlib.pyplot as plt
-import os
 import pandas as pd
-from utils.vis import plot_coev_mat_sectors
-from plotmastery.utils_subfigure import add_letter_and_title
-from utils.postprocessing import annotate_results
+
 import argparse
+import numpy as np
+
+import matplotlib.pyplot as plt
+
+from plotmastery.utils_subfigure import add_letter_and_title
+
+from utils.postprocessing import annotate_results
+from utils.vis import plot_coev_mat_sectors
+
 
 parser = argparse.ArgumentParser()
-parser.add_argument("dataset")
+parser.add_argument("coev_filename")
+parser.add_argument("results_filename")
+parser.add_argument("--letter", "-l", default="C.")
+parser.add_argument("--title", "-t", default="Sector coevolution matrix")
+parser.add_argument("--outname", "-o", default=None)
 args = parser.parse_args()
 
-dataset = args.dataset
+coev_filename = args.coev_filename
+results_filename = args.results_filename
+letter = args.letter
+title = args.title
+outname = args.outname
 
-extensions = ["cocoatree_SCA_none.csv",
-              "cocoatree_MI_none.csv",
-              "cocoatree_NMI_none.csv",
-              "cocoatree_MI_APC.csv"]
+coev_mat = pd.read_csv(coev_filename)
+coev_mat.columns = coev_mat.columns.astype(int)
 
-start_i = 0
-titles = ["SCA", "MI", "NMI", "MI+APC"]
-letters = ["A.", "B.", "C.", "D."]
-axes = [[0, 0], [0, 1], [1, 0], [1, 1]]
+results = pd.read_csv(results_filename)
+results = annotate_results(results)
 
-# Plot coevolution matrix
-fig, axs = plt.subplots(nrows=2, ncols=2, layout='constrained')
-for i, ext in enumerate(extensions):
+fig, ax = plt.subplots(figsize=(4, 3), tight_layout=True)
+cb = plot_coev_mat_sectors(fig, ax, results, coev_mat)
+add_letter_and_title(ax, letter, title=title)
 
-    # Load and process coevolution matrix
-    matrix = str(ext.split('.')[0] + '-distance.csv')
-    coev_mat = pd.read_csv(f"results/cocoatree_gt/{dataset}/{matrix}")
-    coev_mat = coev_mat.to_numpy()
-    # Load and process results file
-    results = pd.read_csv(f"results/cocoatree_gt/{dataset}/{ext}")
-    results = annotate_results(results)
-    results = results.loc[~results["pdb_pos"].isna()]
-    results.filtered_msa_pos = results.filtered_msa_pos.astype('int')
 
-    add_letter_and_title(axs[axes[i][0], axes[i][1]], letters[start_i],
-                         title=titles[start_i])
-    plot_coev_mat_sectors(fig, axs[axes[i][0], axes[i][1]], results, coev_mat,
-                          title="")
-    start_i += 1
-
-os.makedirs(f"figures/{dataset}", exist_ok=True)
-fig.savefig(f"figures/{dataset}/coev_matrix_sectors_all_metrics.png", dpi=300)
-fig.savefig(f"figures/{dataset}/coev_matrix_sectors_all_metrics.pdf")
-
-# Plot coevolution matrix without global mode (ngm)
-start_i = 0
-fig, axs = plt.subplots(nrows=2, ncols=2, layout='constrained')
-for i, ext in enumerate(extensions):
-    # Load and process coevolution matrix without global mode
-    matrix_ngm = str(ext.split('.')[0] + '-distance_ngm.csv')
-    coev_mat_ngm = pd.read_csv(f"results/cocoatree_gt/{dataset}/{matrix_ngm}")
-    coev_mat_ngm = coev_mat_ngm.to_numpy()
-    # Load and process results file
-    results = pd.read_csv(f"results/cocoatree_gt/{dataset}/{ext}")
-    results = annotate_results(results)
-    results = results.loc[~results["pdb_pos"].isna()]
-    results.filtered_msa_pos = results.filtered_msa_pos.astype('int')
-
-    add_letter_and_title(axs[axes[i][0], axes[i][1]], letters[start_i],
-                         title=titles[start_i])
-    plot_coev_mat_sectors(fig, axs[axes[i][0], axes[i][1]], results,
-                          coev_mat_ngm,
-                          title="No global mode")
-    start_i += 1
-
-os.makedirs(f"figures/{dataset}", exist_ok=True)
-fig.savefig(f"figures/{dataset}/coev_matrix_ngm_sectors_all_metrics.png",
-            dpi=300)
-fig.savefig(f"figures/{dataset}/coev_matrix_ngm_sectors_all_metrics.pdf")
+if outname is not None:
+    fig.savefig(outname, dpi=300)
+    fig.savefig(outname.replace(".png", ".pdf"))
