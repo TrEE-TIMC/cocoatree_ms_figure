@@ -14,84 +14,97 @@ set_view (\
    134.411529541,  206.558105469,  -20.000000000 )
 
 python
+import os, sys
 import numpy as np
 import pandas as pd
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
-import sys
+import itertools
+
 
 ###############################################################################
 # Options to change
 path_to_script = "/home/varoquan/Projects/research/2025-margaux-cocoatree/scripts/cocoatree_with_groundtruth"
 
 dataset = "halabi"
-metric = "SCA"
-correction = "none"
+metrics = ["SCA", "MI", "NMI"]
+corrections = ["none", "APC", "entropy"]
 
 
 sys.path.append(path_to_script)
-
 from utils.colors_and_labels import sectors_cm, labels
 
 
-residue_swap = pd.read_csv(
-    os.path.join(
-        path_to_script,
-	f"results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv"))
-residue_swap = residue_swap.loc[~residue_swap["pdb_pos"].isna()]
-
-orig_columns = [c for c in residue_swap.columns if c.startswith("orig_sector_")]
-columns = [c for c in residue_swap.columns if c.startswith("sector_")]
-columns.sort()
-
-residue_lists = [
-    residue_swap.loc[residue_swap[c], "pdb_named_pos"].to_numpy()
-    for c in columns]
-residue_weights = [
-    residue_swap.loc[residue_swap[col], f"IC{col.split('_')[-1]}"].to_numpy()
-    for col in columns]
+def plot_pymol_sectors(dataset, metric, correction, path_to_script):
 
 
-sectors_to_plot = [0, 1, 2]
+	residue_swap = pd.read_csv(
+		os.path.join(
+			path_to_script,
+		f"results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv"))
+	residue_swap = residue_swap.loc[~residue_swap["pdb_pos"].isna()]
 
-for sector in sectors_to_plot:
-	for s, residue_pos in enumerate(residue_lists):
-		if s != sector:
+	columns = [c for c in residue_swap.columns if c.startswith("sector_")]
+	columns.sort()
+
+	residue_lists = [
+		residue_swap.loc[residue_swap[c], "pdb_named_pos"].to_numpy()
+		for c in columns]
+	residue_weights = [
+		residue_swap.loc[residue_swap[col], f"IC{col.split('_')[-1]}"].to_numpy()
+		for col in columns]
+
+
+	sectors_to_plot = np.arange(len(columns))
+
+	# Start by 'cleaning' the structure
+	def clean_residues():
+		for residue in residue_swap["pdb_named_pos"].values:
+			cmd.color("gray80", f"resi {residue}")
+			cmd.hide("spheres", f"resi {residue}")
+
+	for sector in sectors_to_plot:
+		clean_residues()
+
+	
+		for s, residue_pos in enumerate(residue_lists):
+
+			if s != sector:
+				continue
+
+			# Normalize residue weights
+			weights = residue_weights[s]
+			if len(weights):
+				weights -= weights.min()
+				weights /= weights.max()
+
+			colors = sectors_cm[f"sector_{s+1}"](weights)
+
 			for i in range(len(residue_pos)):
+				r, g, b, _ = colors[i]
 				residue = residue_pos[i]
-				cmd.color("gray80", f"resi {residue}")
-				cmd.hide("spheres", f"resi {residue}")
-			continue
 
-		# Normalize residue weights
-		weights = residue_weights[s]
-		weights -= weights.min()
-		weights /= weights.max()
+				color_name = f"residue_{s}_{residue}"
+				cmd.set_color(color_name, [r, g, b])
+				cmd.color(color_name, f"resi {residue}")
+				cmd.show("spheres", f"resi {residue}")
 
-		colors = sectors_cm[f"sector_{s+1}"](weights)
+		cmd.ray(2400, 2400)
+		outname = os.path.join(
+			path_to_script,
+			f"figures/{dataset}/cocoatree_{metric}_{correction}_")
+		os.makedirs(os.path.dirname(outname), exist_ok=True)
 
-		for i in range(len(residue_pos)):
-			r, g, b, _ = colors[i]
-			residue = residue_pos[i]
-
-			color_name = f"residue_{s}_{residue}"
-			cmd.set_color(color_name, [r, g, b])
-			cmd.color(color_name, f"resi {residue}")
-			cmd.show("spheres", f"resi {residue}")
-
-	dataset = "halabi"
-	cmd.ray(2400, 2400)
-	outname = os.path.join(
-		path_to_script,
-		f"figures/{dataset}/cocoatree_{metric}_{correction}_")
-	os.makedirs(os.path.dirname(outname), exist_ok=True)
-
-	sector_name = labels[sector] 
-	cmd.png(outname + f"{sector_name}_sector_1.png", dpi=300)
+		sector_name = labels[sector] 
+		cmd.png(outname + f"{sector_name}_sector_1.png", dpi=300)
 
 
-	cmd.rotate("x", 180)
-	cmd.ray(2400, 2400)
-	cmd.png(outname + f"{sector_name}_sector_2.png", dpi=300)
+		cmd.rotate("x", 180)
+		cmd.ray(2400, 2400)
+		cmd.png(outname + f"{sector_name}_sector_2.png", dpi=300)
+
+
+for metric, correction in itertools.product(metrics, corrections):
+    plot_pymol_sectors(dataset, metric, correction, path_to_script)
 
 python end
