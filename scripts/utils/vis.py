@@ -1,7 +1,9 @@
 import numpy as np
-from .colors_and_labels import colors
 from matplotlib.lines import Line2D
 import matplotlib.pyplot as plt
+from PIL import Image
+
+from .colors_and_labels import colors
 from .colors_and_labels import sectors_cm, labels
 
 
@@ -71,7 +73,7 @@ def plot_scatter_sectors(ax, results, ica, icb, annotate=True,
             color=color)
 
         ax.tick_params(
-            axis='both', which='both', labelsize='x-small',
+            axis='both', which='both', labelsize='xx-small',
             bottom=True, top=False, labeltop=False, labelbottom=True,
             left=True, right=False, labelleft=True, labelright=False)
         ax.xaxis.set_major_locator(plt.MaxNLocator(3))
@@ -96,10 +98,10 @@ def plot_scatter_sectors(ax, results, ica, icb, annotate=True,
     ax.spines["right"].set_linewidth(0)
 
     if add_labels:
-        ax.set_xlabel(ica, fontsize="small",
+        ax.set_xlabel(ica, fontsize="x-small",
                       fontweight="bold",
                       labelpad=2)
-        ax.set_ylabel(icb, fontsize="small", fontweight="bold", labelpad=2)
+        ax.set_ylabel(icb, fontsize="x-small", fontweight="bold", labelpad=2)
 
 
 def create_legend():
@@ -225,3 +227,19 @@ def plot_coev_mat_sectors(fig, ax, results, coev_mat):
     ax.set_yticklabels(labels[:len(label_index)], fontweight="bold")
 
     return cb
+
+
+def plot_image(ax, path, trim=100):
+    """
+    Plot an image
+    """
+    image = np.asarray(
+        Image.open(path))
+
+    image = image[trim:-trim, trim:-trim]
+
+    [ax.spines[s].set_linewidth(0) for s in ax.spines]
+    ax.set_xticks([])
+    ax.set_yticks([])
+
+    ax.imshow(image)

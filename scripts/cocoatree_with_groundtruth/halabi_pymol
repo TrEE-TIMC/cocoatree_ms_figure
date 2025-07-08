@@ -94,7 +94,7 @@ def plot_pymol_sectors(dataset, metric, correction, path_to_script):
 		cmd.ray(2300, 2300)
 		outname = os.path.join(
 			path_to_script,
-			f"figures/{dataset}/cocoatree_{metric}_{correction}_")
+			f"images/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}_")
 		os.makedirs(os.path.dirname(outname), exist_ok=True)
 
 		sector_name = labels[sector] 
@@ -104,6 +104,8 @@ def plot_pymol_sectors(dataset, metric, correction, path_to_script):
 		cmd.rotate("x", 180)
 		cmd.ray(2300, 2300)
 		cmd.png(outname + f"{sector_name}_sector_2.png", dpi=300)
+
+		cmd.rotate("x", 180)
 
 
 for metric, correction in itertools.product(metrics, corrections):

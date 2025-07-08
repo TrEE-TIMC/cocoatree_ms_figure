@@ -16,11 +16,11 @@ rule run_all:
             dataset=datasets,
             metric=coevolution_metrics,
             correction=corrections),
-        expand("figures/{dataset}/sectors-ICA-{metric}_{correction}.png",
+        expand("images/cocoatree_gt/{dataset}/sectors-ICA-{metric}_{correction}.png",
                dataset=datasets,
                metric=coevolution_metrics,
                correction=corrections),
-        expand("figures/{dataset}/sectors-PCA-{metric}_{correction}.png",
+        expand("images/cocoatree_gt/{dataset}/sectors-PCA-{metric}_{correction}.png",
                dataset=datasets,
                metric=coevolution_metrics,
                correction=corrections),
@@ -57,8 +57,8 @@ rule plot_sectors_ICA:
         res="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv",
         script="plot_scatter_sectors.py"
     output: 
-        png="figures/{dataset}/sectors-ICA-{metric}_{correction}.png",
-        pdf="figures/{dataset}/sectors-ICA-{metric}_{correction}.pdf"
+        png="images/cocoatree_gt/{dataset}/sectors-ICA-{metric}_{correction}.png",
+        pdf="images/cocoatree_gt/{dataset}/sectors-ICA-{metric}_{correction}.pdf"
     shell: """
     python {input.script} {input.res} -o {output.png}
     """
@@ -69,8 +69,8 @@ rule plot_sectors_PCA:
         res="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv",
         script="plot_scatter_sectors.py"
     output: 
-        png="figures/{dataset}/sectors-PCA-{metric}_{correction}.png",
-        pdf="figures/{dataset}/sectors-PCA-{metric}_{correction}.pdf"
+        png="images/cocoatree_gt/{dataset}/sectors-PCA-{metric}_{correction}.png",
+        pdf="images/cocoatree_gt/{dataset}/sectors-PCA-{metric}_{correction}.pdf"
     shell: """
     python {input.script} {input.res} --pca -o {output.png}
     """
@@ -118,10 +118,10 @@ rule plot_coevolution_matrix:
         res="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv",
         dis="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}-distance.csv",
     output:
-        png="figures/{dataset}/coev_matrix_sectors-{metric}_{correction}.png",
-        pdf="figures/{dataset}/coev_matrix_sectors-{metric}_{correction}.pdf"
+        png="images/cocoatree_gt/{dataset}/coev_matrix_sectors-{metric}_{correction}.png",
+        pdf="images/cocoatree_gt/{dataset}/coev_matrix_sectors-{metric}_{correction}.pdf"
     shell: """
-    python {input.script} {input.dis} {input.res} -l C. -o {output.png}
+    python {input.script} {input.dis} {input.res} -o {output.png}
     """
 
 
@@ -131,8 +131,8 @@ rule plot_coevolution_matrix_ngm:
         res="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv",
         dis="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}-distance_ngm.csv",
     output:
-        png="figures/{dataset}/coev_matrix_sectors_ngm-{metric}_{correction}.png",
-        pdf="figures/{dataset}/coev_matrix_sectors_ngm-{metric}_{correction}.pdf"
+        png="images/cocoatree_gt/{dataset}/coev_matrix_sectors_ngm-{metric}_{correction}.png",
+        pdf="images/cocoatree_gt/{dataset}/coev_matrix_sectors_ngm-{metric}_{correction}.pdf"
     shell: """
     python {input.script} {input.dis} {input.res} -l D. -o {output.png}
     """
