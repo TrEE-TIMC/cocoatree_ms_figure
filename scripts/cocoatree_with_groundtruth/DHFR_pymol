@@ -1,18 +1,9 @@
-fetch 3TGI, async=0
+fetch 3QL0, async=0
 
 hide
-show cartoon
 bg_color white
+show cartoon
 color gray80
-
-set_view (\
-    -0.658013046,   -0.737063110,   -0.154135883,\
-    -0.427286953,    0.534027934,   -0.729548335,\
-     0.620033801,   -0.414191902,   -0.666334152,\
-     0.000000000,    0.000000000, -170.484817505,\
-   -13.020929337,  -92.443511963,   -6.637340546,\
-   134.411529541,  206.558105469,  -20.000000000 )
-
 zoom complete=0
 
 python
@@ -28,7 +19,7 @@ import itertools
 # Options to change
 path_to_script = "/home/varoquan/Projects/research/2025-margaux-cocoatree/scripts/cocoatree_with_groundtruth"
 
-dataset = "halabi"
+dataset = "DHFR"
 metrics = ["SCA", "MI", "NMI"]
 
 corrections = ["none", "APC", "entropy"]
@@ -91,8 +82,7 @@ def plot_pymol_sectors(dataset, metric, correction, path_to_script):
 				cmd.color(color_name, f"resi {residue}")
 				cmd.show("spheres", f"resi {residue}")
 
-		num_pix = 10000
-		cmd.ray(num_pix, num_pix)
+		cmd.ray(10000, 10000)
 		outname = os.path.join(
 			path_to_script,
 			f"images/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}_")
@@ -103,13 +93,12 @@ def plot_pymol_sectors(dataset, metric, correction, path_to_script):
 
 
 		cmd.rotate("x", 180)
-		cmd.ray(num_pix, num_pix)
+		cmd.ray(10000, 10000)
 		cmd.png(outname + f"{sector_name}_sector_2.png", dpi=300)
-
-		cmd.rotate("x", 180)
 
 
 for metric, correction in itertools.product(metrics, corrections):
     plot_pymol_sectors(dataset, metric, correction, path_to_script)
 
 python end
+

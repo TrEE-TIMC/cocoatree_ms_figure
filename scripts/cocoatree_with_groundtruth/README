@@ -20,4 +20,8 @@ Here are the scripts/results:
 
 All results are generated when typing snakemake -c {njobs}.
 
-The figure_*.py plot the results for the main figures.
+The figure_*.py plot the results for the figures of the paper. Some of them
+require the pymol scripts to be ran before.
+Pymol scripts can be ran inside of pymol using the command
+`@path_to_scripts`. Note that they need to be edited to specify the path
+inside before hand.
