@@ -5,3 +5,5 @@ images
 *.swo
 __pycache__
 .joblib
+figures
+.*
