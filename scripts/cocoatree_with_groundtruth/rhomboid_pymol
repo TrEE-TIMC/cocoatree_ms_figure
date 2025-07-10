@@ -83,7 +83,7 @@ def plot_pymol_sectors(dataset, metric, correction, path_to_script):
 				cmd.color(color_name, f"resi {residue}")
 				cmd.show("spheres", f"resi {residue}")
 
-		cmd.ray(2300, 2300)
+		cmd.ray(10000, 10000)
 		outname = os.path.join(
 			path_to_script,
 			f"images/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}_")
@@ -94,7 +94,7 @@ def plot_pymol_sectors(dataset, metric, correction, path_to_script):
 
 
 		cmd.rotate("x", 180)
-		cmd.ray(2300, 2300)
+		cmd.ray(10000, 10000)
 		cmd.png(outname + f"{sector_name}_sector_2.png", dpi=300)
 
 

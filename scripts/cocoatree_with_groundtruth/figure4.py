@@ -6,10 +6,12 @@ from cocoatree.msa import filter_sequences
 from cocoatree.statistics.position import compute_conservation
 from cocoatree.statistics import pairwise
 from plotmastery.utils_subfigure import add_letter_and_title
+from utils.colors_and_labels import colors
+from utils.postprocessing import annotate_results
 
 mem = Memory(".joblib")
 
-dataset = "rhomboid"
+dataset = "halabi"
 if dataset in ["rivoire", "halabi"]:
     data = datasets.load_S1A_serine_proteases(paper=dataset)
 else:
@@ -23,6 +25,7 @@ seq_kept, seq_id_kept, pos_kept = filter_sequences(sequences, seq_id)
 # Load precomputed results
 res = pd.read_csv(f"results/cocoatree_gt/{dataset}/cocoatree_SCA_none.csv")
 res = res.loc[~res["filtered_msa_pos"].isna()]
+res = annotate_results(res)
 
 sector_cols = [col for col in res.columns if col.startswith("sector")]
 is_in_sectors = res[sector_cols].sum(axis=1) > 0
@@ -40,14 +43,23 @@ _, mi_apc_matrix = mem.cache(pairwise.compute_apc)(mi_matrix)
 
 ###############################################################################
 # plot results
-fig, axes = plt.subplots(figsize=(8, 2), nrows=1, ncols=4, squeeze=False,
+fig, axes = plt.subplots(figsize=(8.3, 2.2), nrows=1, ncols=4, squeeze=False,
 tight_layout=True)
 
 
-def plot_conservation_vs_matrix(ax, matrix, colors):
-    ax.scatter(conservation, matrix.sum(axis=0),
-               c=colors,
-               marker=".", linewidth=0)
+def plot_conservation_vs_matrix(ax, matrix, results=None):
+    sector_columns = [c for c in results.columns if c.startswith("sector")]
+    sector_columns.sort()
+    mask = ~results["is_only_cocoatree"]
+    ax.scatter(conservation[mask], matrix.sum(axis=0)[mask],
+               c=colors["default"], marker=".")
+    for c in sector_columns:
+        sec_id = c.split("_")[-1]
+        mask = res[c]
+        c = colors[f"sector_{sec_id}"] 
+        ax.scatter(conservation[mask], matrix.sum(axis=0)[mask],
+                   c=c,
+                   marker=".", linewidth=0)
     ax.spines["right"].set_linewidth(0)
     ax.spines["top"].set_linewidth(0)
     ax.set_xlabel("Conservation", fontweight="bold", fontsize="small",
@@ -57,17 +69,28 @@ def plot_conservation_vs_matrix(ax, matrix, colors):
         bottom=True, top=False, labeltop=False, labelbottom=True,
         left=True, right=False, labelleft=True, labelright=False)
 
-plot_conservation_vs_matrix(axes[0, 0], sca_matrix, sca_matrix.sum(axis=1))
+
+plot_conservation_vs_matrix(axes[0, 0], sca_matrix, results=res)
 axes[0, 0].set_ylabel("Cum score", fontsize="small", fontweight="bold",
                       labelpad=2)
 add_letter_and_title(axes[0, 0], "A", "SCA")
 
-plot_conservation_vs_matrix(axes[0, 1], mi_matrix, sca_matrix.sum(axis=1))
+
+res = pd.read_csv(f"results/cocoatree_gt/{dataset}/cocoatree_MI_none.csv")
+res = res.loc[~res["filtered_msa_pos"].isna()]
+res = annotate_results(res)
+plot_conservation_vs_matrix(axes[0, 1], mi_matrix, results=res)
 add_letter_and_title(axes[0, 1], "B", "MI")
 
-plot_conservation_vs_matrix(axes[0, 2], nmi_matrix, sca_matrix.sum(axis=1))
+res = pd.read_csv(f"results/cocoatree_gt/{dataset}/cocoatree_NMI_none.csv")
+res = res.loc[~res["filtered_msa_pos"].isna()]
+res = annotate_results(res)
+plot_conservation_vs_matrix(axes[0, 2], nmi_matrix, results=res)
 add_letter_and_title(axes[0, 2], "B", "NMI")
 
-plot_conservation_vs_matrix(axes[0, 3], mi_apc_matrix, sca_matrix.sum(axis=1))
+res = pd.read_csv(f"results/cocoatree_gt/{dataset}/cocoatree_MI_APC.csv")
+res = res.loc[~res["filtered_msa_pos"].isna()]
+res = annotate_results(res)
+plot_conservation_vs_matrix(axes[0, 3], mi_apc_matrix, results=res)
 add_letter_and_title(axes[0, 3], "A", "MI+APC")
 fig.savefig(f"figures/{dataset}_conservation.pdf")
