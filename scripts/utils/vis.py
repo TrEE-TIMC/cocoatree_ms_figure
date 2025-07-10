@@ -185,7 +185,7 @@ def plot_coev_mat_sectors(fig, ax, results, coev_mat):
 
     sector_sizes = [len(sec) for sec in sectors_list]
     cumul_sizes = sum(sector_sizes)
-    sorted_pos = np.concat(sectors_list)
+    sorted_pos = np.concatenate(sectors_list)
 
     submatrix = coev_mat.loc[sorted_pos, sorted_pos].values
     submatrix[np.diag_indices_from(submatrix)] = np.nan
