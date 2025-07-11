@@ -68,6 +68,10 @@ for i in range(n_comp):
                          labelpad=2)
             ax.set_ylabel(f"PC{i+1}", fontweight="bold", fontsize="small",
                           labelpad=2)
+        else:
+            ax.set_xticklabels([])
+            ax.set_yticklabels([])
+
         if i == 0 and j == 1:
             add_letter_and_title(ax, "A.", "Principal components")
 
@@ -92,6 +96,10 @@ for i in range(n_comp):
                          labelpad=2)
             ax.set_ylabel(f"{labels[i]}", fontweight="bold", fontsize="small",
                           labelpad=2)
+        else:
+            ax.set_xticklabels([])
+            ax.set_yticklabels([])
+
         if i == 0 and j == 1:
             add_letter_and_title(ax, "B.", "Independant components")
 
