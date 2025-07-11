@@ -13,3 +13,6 @@ python plot_subfigure_panel.py DHFR -m MI -c none
 python plot_subfigure_panel.py DHFR -m NMI -c none
 python plot_subfigure_panel.py DHFR -m MI -c APC
 
+python plot_figure_conservation_vs_cumscore.py halabi
+python plot_figure_conservation_vs_cumscore.py rhomboid
+python plot_figure_conservation_vs_cumscore.py DHFR

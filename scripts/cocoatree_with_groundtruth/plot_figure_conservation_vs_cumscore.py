@@ -8,14 +8,23 @@ from cocoatree.statistics import pairwise
 from plotmastery.utils_subfigure import add_letter_and_title
 from utils.colors_and_labels import colors
 from utils.postprocessing import annotate_results
+import argparse
 
 mem = Memory(".joblib")
 
-dataset = "halabi"
+parser = argparse.ArgumentParser()
+parser.add_argument("dataset")
+args = parser.parse_args()
+
+dataset = args.dataset
+
 if dataset in ["rivoire", "halabi"]:
     data = datasets.load_S1A_serine_proteases(paper=dataset)
-else:
+elif dataset == "rhomboid":
     data = datasets.load_rhomboid_proteases()
+else:
+    data = datasets.load_DHFR()
+
 seq_id = data["sequence_ids"]
 sequences = data["alignment"]
 n_pos, n_seq = len(sequences[0]), len(sequences)
@@ -52,7 +61,7 @@ def plot_conservation_vs_matrix(ax, matrix, results=None):
     sector_columns.sort()
     mask = ~results["is_only_cocoatree"]
     ax.scatter(conservation[mask], matrix.sum(axis=0)[mask],
-               c=colors["default"], marker=".")
+               c=colors["default"], marker=".", linewidth=0)
     for c in sector_columns:
         sec_id = c.split("_")[-1]
         mask = res[c]
@@ -93,4 +102,4 @@ res = res.loc[~res["filtered_msa_pos"].isna()]
 res = annotate_results(res)
 plot_conservation_vs_matrix(axes[0, 3], mi_apc_matrix, results=res)
 add_letter_and_title(axes[0, 3], "A", "MI+APC")
-fig.savefig(f"figures/{dataset}_conservation.pdf")
+fig.savefig(f"figures/{dataset}/conservation_vs_cumscore.pdf")
