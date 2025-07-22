@@ -43,3 +43,35 @@ darkcolors = {
 colors = lightcolors
 
 labels = ["Red", "Green", "Blue", "Purple", "Crimson", "Orange"]
+
+
+halabi_cmap_from_paper = {
+    'vertebrate': 'black',
+    'not vertebrate': 'grey',
+    'fungi': '#ffe4b5',
+    'bacteria': '#afdde9',
+    'chymotrypsin': 'darkblue',
+    'trypsin': 'magenta',
+    'tryptase': 'yellow',
+    'kallikrein': 'darkorange',
+    'granzyme': 'lime'
+    }
+
+halabi_cmap = {
+    'vertebrate': '#798e87',
+    'not vertebrate': '#c27d38',
+    'fungi': '#ccc591',
+    'bacteria': '#29211fff',
+    'chymotrypsin': '#ff0000ff',
+    'trypsin': '#00a08aff',
+    'tryptase': '#f2ad00ff',
+    'kallikrein': '#f98400ff',
+    'granzyme': '#5bbcd6ff',
+    'Mammalia': '#ff9898ff',
+    'Actinopterygii': '#d9636cff',
+    'Amphibia': '#a91e45ff',
+    'Malacostraca': '#691238ff',
+    'other': 'grey',
+    'Insecta': '#251714ff'
+}
+
