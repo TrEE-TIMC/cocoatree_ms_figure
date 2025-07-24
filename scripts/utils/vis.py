@@ -199,7 +199,7 @@ def plot_coev_mat_sectors(fig, ax, results, coev_mat):
                    vmin=vmin, vmax=vmax,
                    interpolation='none', aspect='equal',
                    origin="lower",
-                   extent=[0, cumul_sizes, 0, cumul_sizes], cmap='RdBu_r')
+                   extent=[0, cumul_sizes, 0, cumul_sizes], cmap='magma')
     cb = fig.colorbar(im)
     cb.ax.tick_params(labelsize="x-small")
     cb.ax.locator = plt.MaxNLocator(nbins=3)
