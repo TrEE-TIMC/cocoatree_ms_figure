@@ -7,9 +7,9 @@ lightcolors = {
     "other": "#006c4b",
     "both": "#006ab2",
     "default": "#9cadbc",
-    "sector_1": "#AB0000", # Red
-    "sector_3": "#0023B2", #"#006ab2", # Green
-    "sector_2": "#078400", #"#006c4b", # Blue
+    "sector_1": "#AB0000",  # Red
+    "sector_3": "#0023B2",  # "#006ab2", # Green
+    "sector_2": "#078400",  # "#006c4b", # Blue
     "sector_4": "#845EC2",
     "sector_5": "crimson",
     "sector_6": "orange"}
@@ -61,17 +61,16 @@ halabi_cmap = {
     'vertebrate': '#798e87',
     'not vertebrate': '#c27d38',
     'fungi': '#ccc591',
-    'bacteria': '#29211fff',
-    'chymotrypsin': '#ff0000ff',
-    'trypsin': '#00a08aff',
-    'tryptase': '#f2ad00ff',
-    'kallikrein': '#f98400ff',
-    'granzyme': '#5bbcd6ff',
-    'Mammalia': '#ff9898ff',
-    'Actinopterygii': '#d9636cff',
-    'Amphibia': '#a91e45ff',
-    'Malacostraca': '#691238ff',
-    'other': 'grey',
-    'Insecta': '#251714ff'
+    'bacteria': '#29211f',
+    'chymotrypsin': '#ff0000',
+    'trypsin': '#00a08a',
+    'tryptase': '#f2ad00',
+    'kallikrein': '#f98400',
+    'granzyme': '#5bbcd6',
+    'Mammalia': '#ff9898',
+    'Actinopterygii': '#d9636c',
+    'Amphibia': '#a91e45',
+    'Malacostraca': '#691238',
+    'other': 'lightgrey',
+    'Insecta': '#251714'
 }
-
