@@ -210,9 +210,9 @@ def plot_coev_mat_sectors(fig, ax, results, coev_mat):
     label_index = []
     for i in range(num_sectors):
         ax.axvline(line_index + sector_sizes[i],
-                   color='0', linewidth=1)
+                   color='white', linewidth=1)
         ax.axhline(line_index + sector_sizes[i],
-                   color='0', linewidth=1)
+                   color='white', linewidth=1)
 
         label_index += [np.sum(line_index) + sector_sizes[i] / 2]
         line_index += sector_sizes[i]
