@@ -121,9 +121,13 @@ if outdir is not None:
     pd.DataFrame(data=coevolution_matrix_ngm).to_csv(outname, index=False)
 
 # Output sector sequences as fasta files
+# The residues in the fasta file are ordered by decreasing contribution to the IC
+# and not following their position along the full sequence
 for sect in range(1, n_components+1):
     col_name = 'sector_' + str(sect)
-    sect_pos_list = results.loc[results[col_name], ['original_msa_pos']]
+    ic_name = 'IC' + str(sect)
+    sect_pos_list = results.loc[results[col_name], ['original_msa_pos', ic_name]]
+    sect_pos_list.sort_values(by=ic_name, ascending=False, inplace=True)
     sect_pos_list = sect_pos_list['original_msa_pos'].to_list()
     sector = []
     for sequence in range(len(data['sequence_ids'])):
