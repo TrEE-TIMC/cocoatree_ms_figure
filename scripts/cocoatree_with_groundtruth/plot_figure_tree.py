@@ -4,6 +4,7 @@ import argparse
 from cocoatree.io import load_MSA, load_tree_ete3
 from cocoatree.visualization import update_tree_ete3_and_return_style
 from utils.postprocessing import annotate_results
+from utils.colors_and_labels import halabi_cmap
 
 parser = argparse.ArgumentParser()
 parser.add_argument("dataset")
@@ -20,6 +21,7 @@ tree = args.tree
 # Load metadata
 if dataset == 'halabi':
     annot_file = '../data/Trypsin/Halabi/halabi_metadata.csv'
+    metadata_list = ['']
 elif dataset == 'rivoire':
     annot_file = '../data/Trypsin/Rivoire/rivoire_metadata.csv'
 elif dataset == 'DHFR':
@@ -35,11 +37,10 @@ results = annotate_results(results)
 results = results.loc[~results["pdb_pos"].isna()]
 num_sectors = int((len(results.columns) - 11)/4)
 
-tree_file = f"results/cocoatree_gt/{dataset}/{tree}"
 
 for sect in range(1, num_sectors+1):
     # Load the tree each iteration to clean out tree_style
-    tree_ete3 = load_tree_ete3(tree_file)
+    tree_ete3 = load_tree_ete3(tree)
     # Load sector sequence as fasta file
     sector_file = f"results/cocoatree_gt/{dataset}/cocoatree_sector_{sect}_{coevolution_metric}_{correction}.fasta"
     sector = load_MSA(sector_file, 'fasta')
@@ -51,12 +52,15 @@ for sect in range(1, num_sectors+1):
         df_annot,
         sector_id,
         sector_seq,
-        meta_data=('superkingdom', 'class', 'family'),
-        fig_title=f"{dataset} - {coevolution_metric} - {correction} - Sector \
-            {sect}",
+        meta_data=['most_abundant_prot_specificity', 'vertebrate',
+                   'most_abundant_class'],
+        show_leaf_name=False,
+        fig_title="",
+        linewidth=4,
+        metadata_colors=halabi_cmap,
         t_sector_seq=True,
         t_sector_heatmap=True,
-        colormap='inferno'
+        colormap='Blues'
     )
 
     os.makedirs(f"figures/{dataset}", exist_ok=True)
