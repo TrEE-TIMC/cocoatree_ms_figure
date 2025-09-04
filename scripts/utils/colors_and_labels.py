@@ -47,7 +47,7 @@ labels = ["Red", "Green", "Blue", "Purple", "Crimson", "Orange"]
 
 halabi_cmap_from_paper = {
     'vertebrate': 'black',
-    'not vertebrate': 'grey',
+    'invertebrate': 'grey',
     'fungi': '#ffe4b5',
     'bacteria': '#afdde9',
     'chymotrypsin': 'darkblue',
@@ -59,11 +59,11 @@ halabi_cmap_from_paper = {
 
 halabi_cmap = {
     'vertebrate': '#798e87',
-    'not vertebrate': '#c27d38',
+    'invertebrate': '#c27d38',
     'fungi': '#ccc591',
     'bacteria': '#29211f',
-    'chymotrypsin': '#ff0000',
-    'trypsin': '#00a08a',
+    'chymotrypsin': '#00a08a',
+    'trypsin': '#ff0000',
     'tryptase': '#f2ad00',
     'kallikrein': '#f98400',
     'granzyme': '#5bbcd6',
@@ -73,4 +73,25 @@ halabi_cmap = {
     'Malacostraca': '#691238',
     'other': 'lightgrey',
     'Insecta': '#251714'
+}
+
+halabi_longer_cmap = {
+    'vertebrate': '#798e87',
+    'invertebrate': '#c27d38',
+    'fungi': '#ccc591',
+    'bacteria': '#29211f',
+    'chymotrypsin': '#00a08a',
+    'trypsin': '#ff0000',
+    'tryptase': '#f2ad00',
+    'kallikrein': '#f98400',
+    'granzyme': '#5bbcd6',
+    'Mammalia': '#C969A1',
+    'Actinopterygii': '#CE4441',
+    'Amphibia': '#EE8577',
+    'Malacostraca': '#EB7926',
+    'other': 'lightgrey',
+    'Insecta': '#FFBB44',
+    'Actinobacteria': '#859B6C',
+    'Arachnida': '#62929A',
+    'Oligochaeta': '#004F63'
 }
