@@ -20,7 +20,7 @@ def compute_all_vs_all(sectors_per_method, comp1=0, comp2=0):
 
 cmaps = list(sectors_cm.values())
 
-fig = plt.figure(figsize=(7.5, 3),
+fig = plt.figure(figsize=(7.5, 2.7),
                  tight_layout=True)
 axes = []
 for j, dataset in enumerate(datasets):

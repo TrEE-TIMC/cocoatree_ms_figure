@@ -108,7 +108,7 @@ def create_legend():
     sector_colors = ["Red", "Green", "Blue", "Purple", "Crimson"]
     sectors = [
         Line2D([0], [0], linewidth=0, marker='o', color=colors[f"sector_{i}"],
-               label=f"{sector_colors[i-1]} sector",
+               label=f"{sector_colors[i-1]}",
                markersize=4) for i in range(1, 5)]
     methods = [
         Line2D([0], [0], marker='o', color="0",

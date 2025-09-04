@@ -16,3 +16,5 @@ python plot_subfigure_panel.py DHFR -m MI -c APC
 python plot_figure_conservation_vs_cumscore.py halabi
 python plot_figure_conservation_vs_cumscore.py rhomboid
 python plot_figure_conservation_vs_cumscore.py DHFR
+
+python plot_protein_logo.py halabi SCA none

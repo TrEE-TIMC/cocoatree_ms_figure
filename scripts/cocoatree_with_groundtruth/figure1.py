@@ -10,7 +10,7 @@ from utils.postprocessing import annotate_results
 
 
 fig = plt.figure(figsize=(7.5, 4.2))
-gs = GridSpec(38, 30, figure=fig, top=0.9, left=0.1)
+gs = GridSpec(38, 30, figure=fig, top=0.94, left=0.07, right=0.93, bottom=0.08)
 
 
 ###############################################################################
@@ -62,7 +62,7 @@ add_letter_and_title(ax, "C.", "DHFR")
 legend = create_legend()
 sec_legend = ax.legend(
     loc=(1.05, .5), frameon=False, fontsize="x-small",
-    handles=legend["sectors"], title="Sectors",
+    handles=legend["sectors"], title="Coco group",
     title_fontproperties={"weight": "bold",
                           "size": "small"},
     alignment="left")
@@ -106,8 +106,6 @@ ax.tick_params(axis='both', which='both', labelsize='x-small',
                bottom=True, top=False, labeltop=False, labelbottom=True,
                left=False, right=False, labelleft=False, labelright=True)
 ax.xaxis.set_major_locator(plt.MaxNLocator(5))
-#ax.set_xlabel("Position in PDB", fontweight="bold", fontsize="small",
-#              labelpad=2)
 
 start_i += shift
 
@@ -140,8 +138,6 @@ ax.tick_params(axis='both', which='both', labelsize='x-small',
                bottom=True, top=False, labeltop=False, labelbottom=True,
                left=False, right=False, labelleft=False, labelright=True)
 ax.xaxis.set_major_locator(plt.MaxNLocator(5))
-#ax.set_xlabel("Position in PDB", fontweight="bold", fontsize="small",
-#              labelpad=2)
 
 start_i += shift
 
@@ -178,9 +174,6 @@ ax.set_xlabel("Position in PDB", fontweight="bold", fontsize="small",
               labelpad=2)
 
 
-
-
 os.makedirs("figures", exist_ok=True)
 fig.savefig("figures/figure_2.pdf")
 fig.savefig("figures/figure_2.png", dpi=300)
-
