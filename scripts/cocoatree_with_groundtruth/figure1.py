@@ -21,8 +21,8 @@ results = annotate_results(results)
 ax = fig.add_subplot(gs[:12, :8])
 plot_scatter_sectors(ax, results, "IC1", "IC2", annotate=False,
                      add_labels=False)
-ax.set_ylabel("IC_{Green}", fontweight="bold", fontsize="small", labelpad=2)
-ax.set_xlabel("IC_{Red}", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_ylabel("IC_Green", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_xlabel("IC_Red", fontweight="bold", fontsize="small", labelpad=2)
 
 add_letter_and_title(ax, "A.", "Serine protease")
 
@@ -32,12 +32,12 @@ add_letter_and_title(ax, "A.", "Serine protease")
 results = pd.read_csv("results/cocoatree_gt/DHFR/cocoatree_SCA_none.csv")
 results = annotate_results(results)
 
-ax = fig.add_subplot(gs[:12, 20:-2])
+ax = fig.add_subplot(gs[:12, 10:18])
 plot_scatter_sectors(
     ax, results, "IC1", "IC2", annotate=False,
     add_labels=False)
-ax.set_ylabel("IC_{Green}", fontweight="bold", fontsize="small", labelpad=2)
-ax.set_xlabel("IC_{Red}", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_ylabel("IC_Green", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_xlabel("IC_Red", fontweight="bold", fontsize="small", labelpad=2)
 
 add_letter_and_title(ax, "B.", "DHFR")
 
@@ -47,11 +47,11 @@ add_letter_and_title(ax, "B.", "DHFR")
 results = pd.read_csv("results/cocoatree_gt/rhomboid/cocoatree_SCA_none.csv")
 results = annotate_results(results)
 
-ax = fig.add_subplot(gs[:12, 10:18])
+ax = fig.add_subplot(gs[:12, 20:-2])
 plot_scatter_sectors(ax, results, "IC1", "IC2", annotate=False,
                      add_labels=False)
-ax.set_ylabel("IC_{Green}", fontweight="bold", fontsize="small", labelpad=2)
-ax.set_xlabel("IC_{Red}", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_ylabel("IC_Green", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_xlabel("IC_Red", fontweight="bold", fontsize="small", labelpad=2)
 
 add_letter_and_title(ax, "C.", "Rhomboid")
 
@@ -94,7 +94,7 @@ plot_sectors(ax, results, columns=order, title="cocoatree")
 ax = fig.add_subplot(gs[start_i+1, :-2])
 plot_sectors(ax, results,
              columns=columns,
-             title="orig")
+             title="original SCA")
 
 # Both
 ax = fig.add_subplot(gs[start_i+2, :-2])
@@ -126,7 +126,7 @@ plot_sectors(ax, results, columns=order, title="cocoatree")
 ax = fig.add_subplot(gs[start_i+1, :-2])
 plot_sectors(ax, results,
              columns=columns,
-             title="orig")
+             title="original SCA")
 
 # Both
 ax = fig.add_subplot(gs[start_i+2, :-2])
@@ -138,8 +138,6 @@ ax.tick_params(axis='both', which='both', labelsize='x-small',
                bottom=True, top=False, labeltop=False, labelbottom=True,
                left=False, right=False, labelleft=False, labelright=True)
 ax.xaxis.set_major_locator(plt.MaxNLocator(5))
-ax.set_xlabel("Position in PDB", fontweight="bold", fontsize="small",
-              labelpad=2)
 
 start_i += shift
 
@@ -160,7 +158,7 @@ plot_sectors(ax, results, columns=order, title="cocoatree")
 ax = fig.add_subplot(gs[start_i+1, :-2])
 plot_sectors(ax, results,
              columns=columns,
-             title="orig")
+             title="original SCA")
 
 # Both
 ax = fig.add_subplot(gs[start_i+2, :-2])
@@ -172,7 +170,8 @@ ax.tick_params(axis='both', which='both', labelsize='x-small',
                bottom=True, top=False, labeltop=False, labelbottom=True,
                left=False, right=False, labelleft=False, labelright=True)
 ax.xaxis.set_major_locator(plt.MaxNLocator(5))
-
+ax.set_xlabel("Position in PDB", fontweight="bold", fontsize="small",
+              labelpad=2)
 
 os.makedirs("figures", exist_ok=True)
 fig.savefig("figures/figure_2.pdf")
