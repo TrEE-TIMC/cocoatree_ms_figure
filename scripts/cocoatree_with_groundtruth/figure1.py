@@ -21,8 +21,8 @@ results = annotate_results(results)
 ax = fig.add_subplot(gs[:12, :8])
 plot_scatter_sectors(ax, results, "IC1", "IC2", annotate=False,
                      add_labels=False)
-ax.set_ylabel("Green", fontweight="bold", fontsize="small", labelpad=2)
-ax.set_xlabel("Red", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_ylabel("IC_{Green}", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_xlabel("IC_{Red}", fontweight="bold", fontsize="small", labelpad=2)
 
 add_letter_and_title(ax, "A.", "Serine protease")
 
@@ -36,8 +36,8 @@ ax = fig.add_subplot(gs[:12, 20:-2])
 plot_scatter_sectors(
     ax, results, "IC1", "IC2", annotate=False,
     add_labels=False)
-ax.set_ylabel("Green", fontweight="bold", fontsize="small", labelpad=2)
-ax.set_xlabel("Red", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_ylabel("IC_{Green}", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_xlabel("IC_{Red}", fontweight="bold", fontsize="small", labelpad=2)
 
 add_letter_and_title(ax, "B.", "DHFR")
 
@@ -50,8 +50,8 @@ results = annotate_results(results)
 ax = fig.add_subplot(gs[:12, 10:18])
 plot_scatter_sectors(ax, results, "IC1", "IC2", annotate=False,
                      add_labels=False)
-ax.set_ylabel("Green", fontweight="bold", fontsize="small", labelpad=2)
-ax.set_xlabel("Red", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_ylabel("IC_{Green}", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_xlabel("IC_{Red}", fontweight="bold", fontsize="small", labelpad=2)
 
 add_letter_and_title(ax, "C.", "Rhomboid")
 
@@ -62,7 +62,7 @@ add_letter_and_title(ax, "C.", "Rhomboid")
 legend = create_legend()
 sec_legend = ax.legend(
     loc=(1.05, .5), frameon=False, fontsize="x-small",
-    handles=legend["sectors"], title="Coco group",
+    handles=legend["sectors"], title="XCoR",
     title_fontproperties={"weight": "bold",
                           "size": "small"},
     alignment="left")
@@ -84,7 +84,7 @@ results = annotate_results(results)
 results = results.loc[~results["pdb_pos"].isna()]
 
 columns = [col for col in results.columns if col.startswith("orig_sector")]
-order = [col for col in results.columns if col.startswith("sector")]
+order = [col for col in results.columns if col.startswith("xcor")]
 # Cocoatree sectors
 ax = fig.add_subplot(gs[start_i, :-2])
 add_letter_and_title(ax, "D.", title="Serine protease")
@@ -116,7 +116,7 @@ results = annotate_results(results)
 results = results.loc[~results["pdb_pos"].isna()]
 
 columns = [col for col in results.columns if col.startswith("orig_sector")]
-order = [col for col in results.columns if col.startswith("sector")]
+order = [col for col in results.columns if col.startswith("xcor")]
 # Cocoatree sectors
 ax = fig.add_subplot(gs[start_i, :-2])
 add_letter_and_title(ax, "E.", title="DHFR")
@@ -150,7 +150,7 @@ results = annotate_results(results)
 results = results.loc[~results["pdb_pos"].isna()]
 
 columns = [col for col in results.columns if col.startswith("orig_sector")]
-order = [col for col in results.columns if col.startswith("sector")]
+order = [col for col in results.columns if col.startswith("xcor")]
 # Cocoatree sectors
 ax = fig.add_subplot(gs[start_i, :-2])
 add_letter_and_title(ax, "F.", title="Rhomboid")
