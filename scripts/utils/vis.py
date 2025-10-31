@@ -121,7 +121,7 @@ def create_legend():
                label="cocoatree",
                markersize=4),
         Line2D([0], [0], marker='x', color="0",
-               label="orig.", linewidth=0,
+               label="original SCA", linewidth=0,
                markersize=4),
         Line2D([0], [0], marker='.', color="0",
                label="none", linewidth=0,
