@@ -12,7 +12,7 @@ def compute_IOU_metric(set1, set2, metric="intersection"):
 
 
 def compute_IOU_metric_all_vs_all(res):
-    sector_cols = [c for c in res.columns if c.startswith("sector")]
+    sector_cols = [c for c in res.columns if c.startswith("xcor")]
     sector_cols.sort()
     orig_sector_cols = [c for c in res.columns if c.startswith("orig_sector")]
     orig_sector_cols.sort()
