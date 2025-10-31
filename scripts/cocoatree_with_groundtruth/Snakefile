@@ -42,8 +42,8 @@ rule cocoatree:
         utils="utils/sectors.py"
     output: 
         res="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv",
-	distance="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}-distance.csv",
-	distance_ngm="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}-distance_ngm.csv"
+	    distance="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}-distance.csv",
+	    distance_ngm="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}-distance_ngm.csv"
     shell: """
     mkdir -p ../results
     python {input.script} {wildcards.dataset} \
