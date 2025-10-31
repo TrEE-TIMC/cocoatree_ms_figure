@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 from cocoatree import datasets
 from cocoatree import perform_sca
-from cocoatree.deconvolution import substract_first_principal_component
+from cocoatree.deconvolution import remove_global_correlations
 from cocoatree.statistics import position
 from cocoatree.io import export_fasta
 
@@ -43,15 +43,11 @@ if dataset == "rhomboid":
 conservation = position.compute_conservation(data["alignment"])
 
 # Perform cocoatree analysis
-coevolution_matrix, results = perform_sca(
+coevolution_matrix, coevolution_matrix_ngm, results = perform_sca(
     data["sequence_ids"], data["alignment"],
     n_components=n_components,
     coevolution_metric=coevolution_metric,
     correction=correction)
-
-# Remove global mode
-coevolution_matrix_ngm = substract_first_principal_component(
-    coevolution_matrix)
 
 # Add original sectors to the results files
 sectors = [
@@ -124,7 +120,7 @@ if outdir is not None:
 # The residues in the fasta file are ordered by decreasing contribution to the IC
 # and not following their position along the full sequence
 for sect in range(1, n_components+1):
-    col_name = 'sector_' + str(sect)
+    col_name = 'xcor_' + str(sect)
     ic_name = 'IC' + str(sect)
     sect_pos_list = results.loc[results[col_name], ['original_msa_pos', ic_name]]
     sect_pos_list.sort_values(by=ic_name, ascending=False, inplace=True)
