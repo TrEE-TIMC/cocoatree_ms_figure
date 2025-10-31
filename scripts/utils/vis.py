@@ -156,9 +156,9 @@ def plot_sectors(ax, results,
                    left=False, right=False, labelleft=False, labelright=True)
 
 
-def plot_coev_mat_sectors(fig, ax, results, coev_mat):
+def plot_coev_mat_xcors(fig, ax, results, coev_mat):
     """
-    Plot coevolution matrix of sectors
+    Plot coevolution matrix of XCoRs
 
     Parameters
     ----------
@@ -169,23 +169,23 @@ def plot_coev_mat_sectors(fig, ax, results, coev_mat):
     coev_mat :
     """
 
-    # Get the number of sectors
+    # Get the number of XCoRs
     # /!\ depends on the structure of the results file
-    sector_columns = [
-        col for col in results.columns if col.startswith("sector_")]
-    sector_columns.sort()
-    num_sectors = len(sector_columns)
-    sectors_list = []
-    for sect in sector_columns:
-        sect_id = sect.split("_")[-1]
-        weights = results.loc[results[sect], f"IC{sect_id}"]
+    xcor_columns = [
+        col for col in results.columns if col.startswith("xcor_")]
+    xcor_columns.sort()
+    num_sectors = len(xcor_columns)
+    xcors_list = []
+    for xcor in xcor_columns:
+        xcor_id = xcor.split("_")[-1]
+        weights = results.loc[results[xcor], f"IC{xcor_id}"]
         weights = weights.sort_values(ascending=False)
-        sect_pos = results.loc[weights.index, 'filtered_msa_pos']
-        sectors_list.append(sect_pos.astype(int).values)
+        xcor_pos = results.loc[weights.index, 'filtered_msa_pos']
+        xcors_list.append(xcor_pos.astype(int).values)
 
-    sector_sizes = [len(sec) for sec in sectors_list]
-    cumul_sizes = sum(sector_sizes)
-    sorted_pos = np.concatenate(sectors_list)
+    xcor_sizes = [len(sec) for sec in xcors_list]
+    cumul_sizes = sum(xcor_sizes)
+    sorted_pos = np.concatenate(xcors_list)
 
     submatrix = coev_mat.loc[sorted_pos, sorted_pos].values
     submatrix[np.diag_indices_from(submatrix)] = np.nan
@@ -209,13 +209,13 @@ def plot_coev_mat_sectors(fig, ax, results, coev_mat):
     line_index = 0
     label_index = []
     for i in range(num_sectors):
-        ax.axvline(line_index + sector_sizes[i],
+        ax.axvline(line_index + xcor_sizes[i],
                    color='white', linewidth=1)
-        ax.axhline(line_index + sector_sizes[i],
+        ax.axhline(line_index + xcor_sizes[i],
                    color='white', linewidth=1)
 
-        label_index += [np.sum(line_index) + sector_sizes[i] / 2]
-        line_index += sector_sizes[i]
+        label_index += [np.sum(line_index) + xcor_sizes[i] / 2]
+        line_index += xcor_sizes[i]
 
     ax.tick_params(axis='both', which='both', labelsize='small',
                    labelright=False, labelleft=True, right=False, left=True,

@@ -8,14 +8,14 @@ import matplotlib.pyplot as plt
 from plotmastery.utils_subfigure import add_letter_and_title
 
 from utils.postprocessing import annotate_results
-from utils.vis import plot_coev_mat_sectors
+from utils.vis import plot_coev_mat_xcors
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument("coev_filename")
 parser.add_argument("results_filename")
 parser.add_argument("--letter", "-l", default="C.")
-parser.add_argument("--title", "-t", default="Sector coevolution matrix")
+parser.add_argument("--title", "-t", default="XCoR coevolution matrix")
 parser.add_argument("--outname", "-o", default=None)
 args = parser.parse_args()
 
@@ -32,10 +32,11 @@ results = pd.read_csv(results_filename)
 results = annotate_results(results)
 
 fig, ax = plt.subplots(figsize=(4, 3), tight_layout=True)
-cb = plot_coev_mat_sectors(fig, ax, results, coev_mat)
+cb = plot_coev_mat_xcors(fig, ax, results, coev_mat)
 add_letter_and_title(ax, letter, title=title)
 
 
 if outname is not None:
     fig.savefig(outname, dpi=300)
     fig.savefig(outname.replace(".png", ".pdf"))
+    fig.savefig(outname.replace(".png", ".svg"))
