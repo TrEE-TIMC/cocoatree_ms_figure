@@ -34,9 +34,8 @@ df_annot = pd.read_csv(annot_file)
 # TODO: Try to find another way that doesn't require loading a file
 results = pd.read_csv(
     f"results/cocoatree_gt/{dataset}/cocoatree_{coevolution_metric}_{correction}.csv")
+num_sectors = len([col for col in results.columns if col.startswith("xcor")])
 results = results.loc[~results["pdb_pos"].isna()]
-num_sectors = int((len(results.columns) - 11)/4)
-num_sectors = 3
 
 cat_name = "prot_specificity"
 categories = {
@@ -44,7 +43,7 @@ categories = {
     "prot_specificity": ["chymotrypsin", "kallikrein", "trypsin", "tryptase",
                          "elastase"],
 
-     "vertebrate":  ["vertebrate", "not vertebrate", "bacteria", "fungi",
+     "Subphylum":  ["vertebrate", "invertebrate", "bacteria", "fungi",
                      "virus"],
      "class":  ["Mammalia", "Actinopterygii", "Amphibia", "Malacostraca",
                 "Insecta"]
@@ -88,7 +87,7 @@ colors = {
 
 for sect in range(1, num_sectors+1):
     # Load sector sequence as fasta file
-    sector_file = f"results/cocoatree_gt/{dataset}/cocoatree_sector_{sect}_{coevolution_metric}_{correction}.fasta"
+    sector_file = f"results/cocoatree_gt/{dataset}/cocoatree_xcor_{sect}_{coevolution_metric}_{correction}.fasta"
     sector = load_MSA(sector_file, 'fasta')
     sector_id = np.array(sector["sequence_ids"])
     sector_seq = np.array(sector["alignment"])
@@ -110,7 +109,7 @@ for sect in range(1, num_sectors+1):
                                   fontweight="bold", fontsize="x-small")
 
             residue_num = results.loc[
-                results[f"sector_{sect}"]].sort_values(
+                results[f"xcor_{sect}"]].sort_values(
                     f"IC{sect}",
                     ascending=False)["pdb_named_pos"].values
             crp_logo.ax.set_xticklabels(
