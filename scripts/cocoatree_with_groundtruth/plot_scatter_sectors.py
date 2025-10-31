@@ -22,7 +22,7 @@ results = pd.read_csv(filename)
 results = results.loc[~results["filtered_msa_pos"].isna()]
 results = annotate_results(results)
 
-sca_sectors = [c for c in results.columns if c.startswith("sector")]
+sca_sectors = [c for c in results.columns if c.startswith("xcor")]
 n_comp = len(sca_sectors)
 
 fig, axes = plt.subplots(
