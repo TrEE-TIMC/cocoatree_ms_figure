@@ -31,9 +31,9 @@ def plot_scatter_sectors(ax, results, ica, icb, annotate=True,
         zorder=1,
         color=colors["default"],)
 
-    sectors_columns = [c for c in results.columns if c.startswith("sector")]
+    xcors_columns = [c for c in results.columns if c.startswith("xcor")]
 
-    for sector in sectors_columns + ["default"]:
+    for sector in xcors_columns + ["default"]:
         if sector != "default":
             marker_mask = results[sector]
         else:
