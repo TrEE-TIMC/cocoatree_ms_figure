@@ -35,7 +35,7 @@ for i, ext in enumerate(extensions):
 
     columns = [col for col in results.columns if col.startswith("orig_sector")]
     order = [col for col in results.columns if
-             col.startswith("sector")]
+             col.startswith("xcor")]
     order.sort()
     
     # Cocoatree sectors
@@ -47,7 +47,7 @@ for i, ext in enumerate(extensions):
     ax = fig.add_subplot(gs[start_i+1, :-2])
     plot_sectors(ax, results,
                  columns=columns,
-                 title="orig")
+                 title="original SCA")
 
     # Both
     ax = fig.add_subplot(gs[start_i+2, :-2])

@@ -43,7 +43,7 @@ miapc_res = pd.read_csv(
 miapc_res = miapc_res.loc[~miapc_res["filtered_msa_pos"].isna()]
 
 sector_cols = [
-    c for c in sca_res.columns if c.startswith("sector")]
+    c for c in sca_res.columns if c.startswith("xcor")]
 sector_cols.sort()
 
 orig_sector_cols = [
@@ -129,7 +129,7 @@ for i in range(n_comp):
                    bottom=True, top=False, labeltop=False, labelbottom=True,
                    left=True, right=False, labelright=False, labelleft=True)
 
-    add_letter_and_title(ax, letters[i], sector_names[i] + " sector",
+    add_letter_and_title(ax, letters[i], sector_names[i] + " XCoR",
                          fontsize="small")
 
 
