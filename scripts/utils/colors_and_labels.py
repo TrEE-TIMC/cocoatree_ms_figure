@@ -7,27 +7,27 @@ lightcolors = {
     "other": "#006c4b",
     "both": "#006ab2",
     "default": "#9cadbc",
-    "sector_1": "#AB0000",  # Red
-    "sector_3": "#0023B2",  # "#006ab2", # Green
-    "sector_2": "#078400",  # "#006c4b", # Blue
-    "sector_4": "#845EC2",
-    "sector_5": "crimson",
-    "sector_6": "orange"}
+    "xcor_1": "#AB0000",  # Red
+    "xcor_3": "#0023B2",  # "#006ab2", # Green
+    "xcor_2": "#078400",  # "#006c4b", # Blue
+    "xcor_4": "#845EC2",
+    "xcor_5": "crimson",
+    "xcor_6": "orange"}
 
 
 sectors_cm = {
     "sector_1": LinearSegmentedColormap.from_list(
-        "sector_1", ['white', lightcolors["sector_1"]]),
+        "sector_1", ['white', lightcolors["xcor_1"]]),
     "sector_2": LinearSegmentedColormap.from_list(
-        "sector_2", ['white', lightcolors["sector_2"]]),
+        "sector_2", ['white', lightcolors["xcor_2"]]),
     "sector_3": LinearSegmentedColormap.from_list(
-        "sector_3", ['white', lightcolors["sector_3"]]),
+        "sector_3", ['white', lightcolors["xcor_3"]]),
     "sector_4": LinearSegmentedColormap.from_list(
-        "sector_4", ['white', lightcolors["sector_4"]]),
+        "sector_4", ['white', lightcolors["xcor_4"]]),
     "sector_5": LinearSegmentedColormap.from_list(
-        "sector_5", ['white', lightcolors["sector_5"]]),
+        "sector_5", ['white', lightcolors["xcor_5"]]),
     "sector_6": LinearSegmentedColormap.from_list(
-        "sector_6", ['white', lightcolors["sector_6"]]),
+        "sector_6", ['white', lightcolors["xcor_6"]]),
     "others": LinearSegmentedColormap.from_list(
         "other", ["white", "dimgray"]),
 
@@ -43,6 +43,8 @@ darkcolors = {
 colors = lightcolors
 
 labels = ["Red", "Green", "Blue", "Purple", "Crimson", "Orange"]
+
+IC_labels = ["IC_Red", "IC_Green", "IC_Blue", "IC_Purple", "IC_Crimson", "IC_Orange"]
 
 
 halabi_cmap_from_paper = {
@@ -62,11 +64,11 @@ halabi_cmap = {
     'invertebrate': '#c27d38',
     'fungi': '#ccc591',
     'bacteria': '#29211f',
-    'chymotrypsin': '#00a08a',
-    'trypsin': '#ff0000',
-    'tryptase': '#f2ad00',
-    'kallikrein': '#f98400',
-    'granzyme': '#5bbcd6',
+    'Chymotrypsin': '#00a08a',
+    'Trypsin': '#ff0000',
+    'Tryptase': '#f2ad00',
+    'Kallikrein': '#f98400',
+    'Granzyme': '#5bbcd6',
     'Mammalia': '#ff9898',
     'Actinopterygii': '#d9636c',
     'Amphibia': '#a91e45',
@@ -80,11 +82,11 @@ halabi_longer_cmap = {
     'invertebrate': '#c27d38',
     'fungi': '#ccc591',
     'bacteria': '#29211f',
-    'chymotrypsin': '#00a08a',
-    'trypsin': '#ff0000',
-    'tryptase': '#f2ad00',
-    'kallikrein': '#f98400',
-    'granzyme': '#5bbcd6',
+    'Chymotrypsin': '#00a08a',
+    'Trypsin': '#ff0000',
+    'Tryptase': '#f2ad00',
+    'Kallikrein': '#f98400',
+    'Granzyme': '#5bbcd6',
     'Mammalia': '#C969A1',
     'Actinopterygii': '#CE4441',
     'Amphibia': '#EE8577',
