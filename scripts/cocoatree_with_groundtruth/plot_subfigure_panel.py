@@ -9,10 +9,10 @@ from matplotlib.gridspec import GridSpec
 from plotmastery.utils_subfigure import add_letter_and_title
 
 from utils.vis import plot_scatter_sectors
-from utils.vis import plot_coev_mat_sectors
+from utils.vis import plot_coev_mat_xcors
 from utils.vis import plot_image
 from utils.postprocessing import annotate_results
-from utils.colors_and_labels import labels
+from utils.colors_and_labels import labels, IC_labels
 
 import argparse
 
@@ -34,7 +34,7 @@ results_filename = \
 results = pd.read_csv(results_filename)
 results = annotate_results(results)
 
-sca_sectors = [c for c in results.columns if c.startswith("sector")]
+sca_sectors = [c for c in results.columns if c.startswith("xcor")]
 n_comp = len(sca_sectors)
 
 fig = plt.figure(figsize=(8.3, 11.7))
@@ -92,9 +92,9 @@ for i in range(n_comp):
            annotate=False, add_labels=False)
 
         if i == j-1:
-            ax.set_xlabel(f"{labels[j]}", fontweight="bold", fontsize="small",
+            ax.set_xlabel(f"{IC_labels[j]}", fontweight="bold", fontsize="small",
                          labelpad=2)
-            ax.set_ylabel(f"{labels[i]}", fontweight="bold", fontsize="small",
+            ax.set_ylabel(f"{IC_labels[i]}", fontweight="bold", fontsize="small",
                           labelpad=2)
         else:
             ax.set_xticklabels([])
@@ -104,7 +104,7 @@ for i in range(n_comp):
             add_letter_and_title(ax, "B.", "Independant components")
 
 ###############################################################################
-# Sector coevolution matrix
+# XCoR coevolution matrix
 
 col_start = (n_comp-1)*(height + sep) + 3*sep
 height = 195
@@ -117,8 +117,8 @@ coev_mat.columns = coev_mat.columns.astype(int)
 results = pd.read_csv(results_filename)
 results = annotate_results(results)
 
-cb = plot_coev_mat_sectors(fig, ax, results, coev_mat)
-add_letter_and_title(ax, "C.", "Sector coevolution")
+cb = plot_coev_mat_xcors(fig, ax, results, coev_mat)
+add_letter_and_title(ax, "C.", "XCoR coevolution")
 
 
 ax = fig.add_subplot(gs[col_start:col_start+height, 500:500+2*height])
@@ -129,8 +129,8 @@ coev_mat.columns = coev_mat.columns.astype(int)
 results = pd.read_csv(results_filename)
 results = annotate_results(results)
 
-cb = plot_coev_mat_sectors(fig, ax, results, coev_mat)
-add_letter_and_title(ax, "D.", "Sector coevolution (without global mode)")
+cb = plot_coev_mat_xcors(fig, ax, results, coev_mat)
+add_letter_and_title(ax, "D.", "XCoR coevolution (without global mode)")
 
 ###############################################################################
 # 3D structures
