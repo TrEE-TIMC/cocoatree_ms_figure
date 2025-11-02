@@ -1,104 +1,70 @@
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-from utils.vis import sectors_cm
-from plotmastery.utils_subfigure import add_letter_and_title
-from plotmastery import utils_heatmap
-from utils.sectors import compute_IOU_metric
+from cocoatree.io import load_MSA, load_tree_ete3
+from cocoatree.visualization import update_tree_ete3_and_return_style
+from utils.colors_and_labels import halabi_longer_cmap
+import argparse
 
-datasets = ["halabi"]
+parser = argparse.ArgumentParser(prog='plot_figure_tree',
+                                 description='This script allows to select different datasets, metrics, and corrections' \
+                                 'to plot Cocoatree\'s figure of a phylogenetic tree along with sequence information and' \
+                                 'a heatmap of sequence identity')
+parser.add_argument("tree")
+parser.add_argument("metadata")
+parser.add_argument("sector_fasta")
+parser.add_argument('metadata_list', metavar='N', type=str, nargs='+',
+                    help='a list of metadata to display')
+parser.add_argument('title')
+parser.add_argument('cmap')
+parser.add_argument("output")
+args = parser.parse_args()
+
+tree = args.tree
+# tree = '/home/jullimar/Documents/Postdoc_TIMC/Trypsines/data/Halabi/4_IQTREE/halabi_subset_aln_kpsg.fasta.treefile'
+metadata = args.metadata
+# metadata = '/home/jullimar/Documents/Postdoc_TIMC/2023-margaux-cocoatree/data/Trypsin/Halabi/halabi_metadata.csv'
+sector_file = args.sector_fasta
+# sector_file = '/home/jullimar/Documents/Postdoc_TIMC/2023-margaux-cocoatree/scripts/results/cocoatree_gt/halabi/cocoatree_xcor_1_SCA_none.fasta'
+# sector_file = '/home/jullimar/Documents/Postdoc_TIMC/halabi_xcor_1_SCA_none.fasta'
+outname = args.output
+# outname = '/home/jullimar/Documents/Postdoc_TIMC/test_plot_figure3C.png'
+metadata_list = args.metadata_list
+# metadata_list = ['Protein_type', 'Subphylum', 'Class']
+title = args.title
+cmap = args.cmap
 
 
-def compute_all_vs_all(sectors_per_method, comp1=0, comp2=0):
-    IOU_metric = np.zeros(
-        (len(sectors_per_method), len(sectors_per_method)))
-    for i, met1 in enumerate(sectors_per_method):
-        for j, met2 in enumerate(sectors_per_method):
-            IOU_metric[i, j] = compute_IOU_metric(met1[comp1], met2[comp2])
-    return IOU_metric
+#print(metadata_list)
+#print(type(metadata_list))
+
+# Load metadata file
+df_annot = pd.read_csv(metadata)
+# Load tree file
+tree_ete3 = load_tree_ete3(tree)
+# Load sector sequence as fasta file
+sector = load_MSA(sector_file, 'fasta')
+sector_id = sector["sequence_ids"]
+sector_seq = sector["alignment"]
+#subsector_seq = [res[:5] for res in sector_seq]
+
+#subsector_seq = []
+#for seq in sector_seq:
+#    subseq = str(seq[1]+seq[2]+seq[4])
+#    subsector_seq.append(subseq)
 
 
-cmaps = list(sectors_cm.values())
+tree_style, _ = update_tree_ete3_and_return_style(
+    tree_ete3,
+    df_annot,
+    sector_id,
+    sector_seq,
+    meta_data=metadata_list,
+    show_leaf_name=False,
+    fig_title=title,
+    linewidth=4,
+    metadata_colors=halabi_longer_cmap,
+    t_xcor_seq=True,
+    t_xcor_heatmap=True,
+    colormap=cmap
+)
 
-fig = plt.figure(figsize=(7.5, 2.7),
-                 tight_layout=True)
-axes = []
-for j, dataset in enumerate(datasets):
-    dataset_ax = []
-    # Load precomputed results
-    sca_res = pd.read_csv(
-        f"results/cocoatree_gt/{dataset}/cocoatree_SCA_none.csv")
-    sca_res = sca_res.loc[~sca_res["filtered_msa_pos"].isna()]
-
-    mi_res = pd.read_csv(
-        f"results/cocoatree_gt/{dataset}/cocoatree_MI_none.csv")
-    mi_res = mi_res.loc[~mi_res["filtered_msa_pos"].isna()]
-
-    nmi_res = pd.read_csv(
-        f"results/cocoatree_gt/{dataset}/cocoatree_NMI_none.csv")
-    nmi_res = nmi_res.loc[~nmi_res["filtered_msa_pos"].isna()]
-
-    miapc_res = pd.read_csv(
-        f"results/cocoatree_gt/{dataset}/cocoatree_MI_APC.csv")
-    miapc_res = miapc_res.loc[~miapc_res["filtered_msa_pos"].isna()]
-
-    sector_cols = [
-        c for c in sca_res.columns if c.startswith("xcor")]
-    sector_cols.sort()
-
-    orig_sector_cols = [
-        c for c in sca_res.columns if c.startswith("orig_sector")]
-
-    # Get original sectors in the original order
-    orig_sectors = [np.where(sca_res[c])[0] for c in orig_sector_cols]
-    sca_sectors = [np.where(sca_res[c])[0] for c in sector_cols]
-    mi_sectors = [np.where(mi_res[c])[0] for c in sector_cols]
-    nmi_sectors = [np.where(nmi_res[c])[0] for c in sector_cols]
-    miapc_sectors = [np.where(miapc_res[c])[0] for c in sector_cols]
-
-    all_sectors = [orig_sectors, sca_sectors, mi_sectors, nmi_sectors,
-                   miapc_sectors]
-
-    n_comp = len(sca_sectors)
-
-    letters = ["A.", "B.", "C.", "D."]
-    sector_names = ["Red", "Green", "Blue", "Purple"]
-
-    for i in range(n_comp):
-
-        ax = fig.add_subplot(len(datasets), n_comp, (j*n_comp+i+1))
-        dataset_ax.append(ax)
-        IOU_metric_comp1 = compute_all_vs_all(all_sectors, comp1=i, comp2=i)
-        m = ax.matshow(IOU_metric_comp1, vmin=0, cmap=cmaps[i])
-        utils_heatmap.annotate_heatmap(
-            m, valfmt="{x:1.0f}",
-            fontsize="x-small")
-        ax.set_yticklabels(
-                ["", "ori.", "SCA", "MI", "NMI", "MI+APC"],
-                fontsize="x-small")
-        ax.set_xticklabels(
-                ["", "ori.", "SCA", "MI", "NMI", "MI+APC"],
-                fontsize="x-small", rotation=90)
-        ax.tick_params(
-            axis='both', which='both', labelsize='x-small',
-            bottom=True, top=False, labeltop=False, labelbottom=True,
-            left=True, right=False, labelright=False, labelleft=True)
-
-    axes.append(dataset_ax)
-
-add_letter_and_title(
-    axes[0][0],
-    letters[0],
-    "Red sector")
-
-add_letter_and_title(
-    axes[0][1],
-    letters[1],
-    "Green sector")
-
-add_letter_and_title(
-    axes[0][2],
-    letters[2],
-    "Blue sector")
-
-fig.savefig("figures/figure_4.pdf")
+tree_ete3.render(outname, tree_style=tree_style)
