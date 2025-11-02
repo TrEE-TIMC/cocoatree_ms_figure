@@ -43,7 +43,7 @@ for j, dataset in enumerate(datasets):
     miapc_res = miapc_res.loc[~miapc_res["filtered_msa_pos"].isna()]
 
     sector_cols = [
-        c for c in sca_res.columns if c.startswith("sector")]
+        c for c in sca_res.columns if c.startswith("xcor")]
     sector_cols.sort()
 
     orig_sector_cols = [
