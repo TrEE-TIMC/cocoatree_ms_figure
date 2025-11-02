@@ -47,7 +47,7 @@ for sect in range(1, num_sectors+1):
     sector_id = sector["sequence_ids"]
     sector_seq = sector["alignment"]
 
-    tree_style = update_tree_ete3_and_return_style(
+    tree_style, _ = update_tree_ete3_and_return_style(
         tree_ete3,
         df_annot,
         sector_id,
@@ -58,8 +58,8 @@ for sect in range(1, num_sectors+1):
         fig_title="",
         linewidth=4,
         metadata_colors=halabi_cmap,
-        t_sector_seq=True,
-        t_sector_heatmap=True,
+        t_xcor_seq=True,
+        t_xcor_heatmap=True,
         colormap='Blues'
     )
 
