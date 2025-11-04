@@ -89,16 +89,16 @@ for j, dataset in enumerate(datasets):
 add_letter_and_title(
     axes[0][0],
     letters[0],
-    "Red sector")
+    "Red ")
 
 add_letter_and_title(
     axes[0][1],
     letters[1],
-    "Green sector")
+    "Green ")
 
 add_letter_and_title(
     axes[0][2],
     letters[2],
-    "Blue sector")
+    "Blue ")
 
 fig.savefig("figures/figure_4.pdf")

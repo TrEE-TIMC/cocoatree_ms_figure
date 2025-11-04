@@ -17,7 +17,7 @@ import itertools
 
 ###############################################################################
 # Options to change
-path_to_script = "/home/varoquan/Projects/research/2025-margaux-cocoatree/scripts/cocoatree_with_groundtruth"
+path_to_script = "/home/nelle/Projects/research/2025-margaux-cocoatree/scripts/cocoatree_with_groundtruth"
 
 dataset = "DHFR"
 metrics = ["SCA", "MI", "NMI"]
@@ -37,7 +37,7 @@ def plot_pymol_sectors(dataset, metric, correction, path_to_script):
 		f"results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv"))
 	residue_swap = residue_swap.loc[~residue_swap["pdb_pos"].isna()]
 
-	columns = [c for c in residue_swap.columns if c.startswith("sector_")]
+	columns = [c for c in residue_swap.columns if c.startswith("xcor_")]
 	columns.sort()
 
 	residue_lists = [
