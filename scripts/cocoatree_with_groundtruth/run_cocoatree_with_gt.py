@@ -90,7 +90,7 @@ order = get_best_ordered_sectors(results, dataset=dataset,
 rename = {}
 for i, j in enumerate(order):
     rename[f"IC{j+1}"] = f"IC{i+1}"
-    rename[f"sector_{j+1}"] = f"sector_{i+1}"
+    rename[f"xcor_{j+1}"] = f"xcor_{i+1}"
 results.rename(rename, axis=1, inplace=True)
 
 # Add statistics on the MSA such as conservation / number of gaps

@@ -31,7 +31,7 @@ def compute_IOU_metric_all_vs_all(res):
 
 def get_best_ordered_sectors(res, dataset="halabi", type="SCA",
                              correction=None):
-    sector_cols = [c for c in res.columns if c.startswith("sector")]
+    sector_cols = [c for c in res.columns if c.startswith("xcor")]
 
     all_scores = compute_IOU_metric_all_vs_all(res)
 
