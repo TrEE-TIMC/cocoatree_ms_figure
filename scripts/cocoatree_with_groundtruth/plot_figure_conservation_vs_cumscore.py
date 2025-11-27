@@ -53,7 +53,7 @@ _, mi_apc_matrix = mem.cache(pairwise.compute_apc)(mi_matrix)
 ###############################################################################
 # plot results
 fig, axes = plt.subplots(figsize=(8.3, 2.2), nrows=1, ncols=4, squeeze=False,
-tight_layout=True)
+                         tight_layout=True)
 
 
 def plot_conservation_vs_matrix(ax, matrix, results=None):
@@ -95,11 +95,11 @@ res = pd.read_csv(f"results/cocoatree_gt/{dataset}/cocoatree_NMI_none.csv")
 res = res.loc[~res["filtered_msa_pos"].isna()]
 res = annotate_results(res)
 plot_conservation_vs_matrix(axes[0, 2], nmi_matrix, results=res)
-add_letter_and_title(axes[0, 2], "B", "NMI")
+add_letter_and_title(axes[0, 2], "C", "NMI")
 
 res = pd.read_csv(f"results/cocoatree_gt/{dataset}/cocoatree_MI_APC.csv")
 res = res.loc[~res["filtered_msa_pos"].isna()]
 res = annotate_results(res)
 plot_conservation_vs_matrix(axes[0, 3], mi_apc_matrix, results=res)
-add_letter_and_title(axes[0, 3], "A", "MI+APC")
+add_letter_and_title(axes[0, 3], "D", "MI+APC")
 fig.savefig(f"figures/{dataset}/conservation_vs_cumscore.pdf")
