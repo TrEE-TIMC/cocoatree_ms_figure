@@ -27,19 +27,19 @@ for j, dataset in enumerate(datasets):
     dataset_ax = []
     # Load precomputed results
     sca_res = pd.read_csv(
-        f"results/cocoatree_gt/{dataset}/cocoatree_SCA_none.csv")
+        f"cocoatree_with_groundtruth/results/cocoatree_gt/{dataset}/cocoatree_SCA_none.csv")
     sca_res = sca_res.loc[~sca_res["filtered_msa_pos"].isna()]
 
     mi_res = pd.read_csv(
-        f"results/cocoatree_gt/{dataset}/cocoatree_MI_none.csv")
+        f"cocoatree_with_groundtruth/results/cocoatree_gt/{dataset}/cocoatree_MI_none.csv")
     mi_res = mi_res.loc[~mi_res["filtered_msa_pos"].isna()]
 
     nmi_res = pd.read_csv(
-        f"results/cocoatree_gt/{dataset}/cocoatree_NMI_none.csv")
+        f"cocoatree_with_groundtruth/results/cocoatree_gt/{dataset}/cocoatree_NMI_none.csv")
     nmi_res = nmi_res.loc[~nmi_res["filtered_msa_pos"].isna()]
 
     miapc_res = pd.read_csv(
-        f"results/cocoatree_gt/{dataset}/cocoatree_MI_APC.csv")
+        f"cocoatree_with_groundtruth/results/cocoatree_gt/{dataset}/cocoatree_MI_APC.csv")
     miapc_res = miapc_res.loc[~miapc_res["filtered_msa_pos"].isna()]
 
     sector_cols = [
@@ -89,16 +89,16 @@ for j, dataset in enumerate(datasets):
 add_letter_and_title(
     axes[0][0],
     letters[0],
-    "Red ")
+    "Red XCoR")
 
 add_letter_and_title(
     axes[0][1],
     letters[1],
-    "Green ")
+    "Green XCoR")
 
 add_letter_and_title(
     axes[0][2],
     letters[2],
-    "Blue ")
+    "Blue XCoR")
 
-fig.savefig("figures/figure_4.pdf")
+fig.savefig("figures/figure_5.pdf")
