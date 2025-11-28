@@ -174,5 +174,5 @@ ax.set_xlabel("Position in PDB", fontweight="bold", fontsize="small",
               labelpad=2)
 
 os.makedirs("figures", exist_ok=True)
-fig.savefig("figures/figure_2.pdf")
-fig.savefig("figures/figure_2.png", dpi=300)
+fig.savefig("figures/figure_3.pdf")
+fig.savefig("figures/figure_3.png", dpi=300)
