@@ -19,14 +19,15 @@ SCA_matrix = compute_sca_matrix(seq_kept)
 
 #################
 # Plot SCA matrix
-fig, axes = plt.subplots(figsize=(7.5, 2.7), nrows=1, ncols=3, squeeze=False,
+fig, axes = plt.subplots(figsize=(9, 3), nrows=1, ncols=3, squeeze=False,
                          tight_layout=True)
 ax = axes[0, 0]
 im = ax.imshow(SCA_matrix, vmin=0, vmax=1.4, cmap='inferno')
 
-ax.set_xlabel('Residues', fontweight="bold", fontsize="small", labelpad=2)
+# ax.set_xlabel('Residues', fontweight="bold", fontsize="small", labelpad=2)
 ax.set_ylabel('Residues', fontweight="bold", fontsize="small", labelpad=2)
-# fig.colorbar(im, shrink=0.7)
+cb = fig.colorbar(im, shrink=0.6)
+cb.set_ticks([])
 add_letter_and_title(axes[0, 0], "A.", "SCA matrix")
 
 n_components = 3
@@ -48,8 +49,8 @@ im = ax.imshow(SCA_matrix[np.ix_(sorted_pos, sorted_pos)],
                interpolation='none', aspect='equal',
                extent=[0, cumul_sizes, cumul_sizes, 0],
                cmap='inferno')
-# cb = fig.colorbar(im)
-# cb.set_label("coevolution level")
+cb = fig.colorbar(im, shrink=0.6)
+cb.set_ticks([])
 
 line_index = 0
 n_xcors = len(xcors)
@@ -84,8 +85,8 @@ im = ax.imshow(SCA_matrix_ngm[np.ix_(sorted_pos, sorted_pos)],
                interpolation='none', aspect='equal',
                extent=[0, cumul_sizes, cumul_sizes, 0],
                cmap='inferno')
-# cb = fig.colorbar(im)
-# cb.set_label("coevolution level")
+cb = fig.colorbar(im, shrink=0.6)
+cb.set_label("coevolution level")
 
 line_index = 0
 n_xcors = len(xcors)
