@@ -70,7 +70,7 @@ ax1 = ax.twinx()
 ax.plot(np.arange(results.shape[0]), results["msa_conservation"],
         color="black", label="conservation")
 ax1.plot(np.arange(results.shape[0]), results["msa_perc_gap"], color="gray",
-        label="Percentage gaps")
+         label="Percentage gaps")
 ax.spines["top"].set_linewidth(0)
 ax.spines["right"].set_linewidth(0)
 ax1.spines["top"].set_linewidth(0)
@@ -90,10 +90,10 @@ ax.set_ylabel("Conservation", fontweight="bold", fontsize="small")
 ax.xaxis.set_major_locator(plt.MaxNLocator(5))
 
 ax.set_xlabel("Position in PDB", fontweight="bold", fontsize="small",
-                labelpad=2)
+              labelpad=2)
 ax.set_xlim((0, len(results)))
 
-add_letter_and_title(ax,"E.", title="Conservation and gaps")
+add_letter_and_title(ax, "E.", title="Conservation and gaps")
 
 os.makedirs(f"figures/{dataset}", exist_ok=True)
 fig.savefig(f"figures/{dataset}/sectors_pdb.png", dpi=300)
