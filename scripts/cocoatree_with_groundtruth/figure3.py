@@ -21,8 +21,10 @@ results = annotate_results(results)
 ax = fig.add_subplot(gs[:12, :8])
 plot_scatter_sectors(ax, results, "IC1", "IC2", annotate=False,
                      add_labels=False)
-ax.set_ylabel("IC_Green", fontweight="bold", fontsize="small", labelpad=2)
-ax.set_xlabel("IC_Red", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_ylabel(r'$\mathrm{\mathbf{IC}}_{\mathrm{\mathbf{green}}}$',
+              fontweight="bold", fontsize="small", labelpad=2)
+ax.set_xlabel(r'$\mathrm{\mathbf{IC}}_{\mathrm{\mathbf{red}}}$',
+              fontweight="bold", fontsize="small", labelpad=2)
 
 add_letter_and_title(ax, "A.", "Serine protease")
 
@@ -36,8 +38,10 @@ ax = fig.add_subplot(gs[:12, 10:18])
 plot_scatter_sectors(
     ax, results, "IC1", "IC2", annotate=False,
     add_labels=False)
-ax.set_ylabel("IC_Green", fontweight="bold", fontsize="small", labelpad=2)
-ax.set_xlabel("IC_Red", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_ylabel(r'$\mathrm{\mathbf{IC}}_{\mathrm{\mathbf{green}}}$',
+              fontweight="bold", fontsize="small", labelpad=2)
+ax.set_xlabel(r'$\mathrm{\mathbf{IC}}_{\mathrm{\mathbf{red}}}$',
+              fontweight="bold", fontsize="small", labelpad=2)
 
 add_letter_and_title(ax, "B.", "DHFR")
 
@@ -50,8 +54,10 @@ results = annotate_results(results)
 ax = fig.add_subplot(gs[:12, 20:-2])
 plot_scatter_sectors(ax, results, "IC1", "IC2", annotate=False,
                      add_labels=False)
-ax.set_ylabel("IC_Green", fontweight="bold", fontsize="small", labelpad=2)
-ax.set_xlabel("IC_Red", fontweight="bold", fontsize="small", labelpad=2)
+ax.set_ylabel(r'$\mathrm{\mathbf{IC}}_{\mathrm{\mathbf{green}}}$',
+              fontweight="bold", fontsize="small", labelpad=2)
+ax.set_xlabel(r'$\mathrm{\mathbf{IC}}_{\mathrm{\mathbf{red}}}$',
+              fontweight="bold", fontsize="small", labelpad=2)
 
 add_letter_and_title(ax, "C.", "Rhomboid")
 
