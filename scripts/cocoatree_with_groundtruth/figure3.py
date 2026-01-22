@@ -9,7 +9,7 @@ from plotmastery.utils_subfigure import add_letter_and_title
 from utils.postprocessing import annotate_results
 
 
-fig = plt.figure(figsize=(7.5, 4.2))
+fig = plt.figure(figsize=(8, 4.2))
 gs = GridSpec(38, 30, figure=fig, top=0.94, left=0.07, right=0.93, bottom=0.08)
 
 
