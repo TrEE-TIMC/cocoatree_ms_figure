@@ -61,7 +61,7 @@ all_sectors = [orig_sectors, sca_sectors, mi_sectors, nmi_sectors,
 
 n_comp = len(sca_sectors)
 
-letters = ["A", "B", "C", "D", "E", "F"]
+letters = ["A.", "B.", "C.", "D.", "E.", "F."]
 sector_names = ["Red", "Green", "Blue", "Purple", "Crimson", "Orange"]
 
 cmaps = list(sectors_cm.values())
@@ -129,8 +129,7 @@ for i in range(n_comp):
                    bottom=True, top=False, labeltop=False, labelbottom=True,
                    left=True, right=False, labelright=False, labelleft=True)
 
-    add_letter_and_title(ax, letters[i], sector_names[i] + " XCoR",
-                         fontsize="small")
+    add_letter_and_title(ax, letters[i], sector_names[i] + " XCoR")
 
 
 fig.savefig(f"figures/{dataset}/confusion_row.pdf")
