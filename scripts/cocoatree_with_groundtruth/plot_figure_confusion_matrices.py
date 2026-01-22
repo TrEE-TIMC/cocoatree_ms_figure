@@ -84,14 +84,14 @@ for i, j in itertools.product(range(n_comp), range(n_comp)):
         fontsize="x-small")
     if i == 0:
         ax.set_xticklabels(
-            ["", "ori.", "SCA", "MI", "NMI", "MI+APC"],
+            ["", dataset, "SCA", "MI", "NMI", "MI+APC"],
             fontsize="x-small")
         ax.set_title(sector_names[j], fontweight="bold", fontsize="medium")
     else:
         ax.set_xticks([])
     if i == j:
         ax.set_yticklabels(
-            ["", "ori.", "SCA", "MI", "NMI", "MI+APC"],
+            ["", dataset, "SCA", "MI", "NMI", "MI+APC"],
             fontsize="x-small")
         ax.set_ylabel(sector_names[j], fontweight="bold")
     else:
@@ -119,10 +119,10 @@ for i in range(n_comp):
         m, valfmt="{x:1.0f}",
         fontsize="x-small")
     ax.set_xticklabels(
-            ["", "ori.", "SCA", "MI", "NMI", "MI+APC"],
+            ["", dataset, "SCA", "MI", "NMI", "MI+APC"],
             fontsize="x-small")
     ax.set_yticklabels(
-            ["", "ori.", "SCA", "MI", "NMI", "MI+APC"],
+            ["", dataset, "SCA", "MI", "NMI", "MI+APC"],
             fontsize="x-small")
 
     ax.tick_params(axis='both', which='both', labelsize='x-small',
