@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
+from matplotlib.colors import SymLogNorm
 from cocoatree.datasets import load_S1A_serine_proteases
 from cocoatree.msa import filter_sequences
 from cocoatree.statistics.pairwise import compute_sca_matrix
-from cocoatree.deconvolution import extract_principal_components, \
+from cocoatree.decomposition import extract_principal_components, \
     extract_independent_components, extract_xcors_from_ICs, \
     remove_global_correlations
 from plotmastery.utils_subfigure import add_letter_and_title
@@ -22,7 +23,9 @@ SCA_matrix = compute_sca_matrix(seq_kept)
 fig, axes = plt.subplots(figsize=(9, 3), nrows=1, ncols=3, squeeze=False,
                          tight_layout=True)
 ax = axes[0, 0]
-im = ax.imshow(SCA_matrix, vmin=0, vmax=1.4, cmap='inferno')
+norm = SymLogNorm(linthresh=0.5, linscale=1, vmin=SCA_matrix.min(),
+                  vmax=SCA_matrix.max())
+im = ax.imshow(SCA_matrix, norm=norm, cmap='inferno')
 
 # ax.set_xlabel('Residues', fontweight="bold", fontsize="small", labelpad=2)
 ax.set_ylabel('Residues', fontweight="bold", fontsize="small", labelpad=2)
@@ -44,8 +47,12 @@ sorted_pos = [p for xcor in xcors for p in xcor]
 ###################################################
 # Plot reduced SCA matrix sorted according to XCoRs
 ax = axes[0, 1]
+norm = SymLogNorm(linthresh=1.5, linscale=1,
+                  vmin=SCA_matrix[np.ix_(sorted_pos, sorted_pos)].min(),
+                  vmax=SCA_matrix[np.ix_(sorted_pos, sorted_pos)].max())
 im = ax.imshow(SCA_matrix[np.ix_(sorted_pos, sorted_pos)],
-               vmin=0, vmax=2,
+               # vmin=0, vmax=2,
+               norm=norm,
                interpolation='none', aspect='equal',
                extent=[0, cumul_sizes, cumul_sizes, 0],
                cmap='inferno')
@@ -80,8 +87,11 @@ add_letter_and_title(axes[0, 1], "B.", "XCoR SCA matrix")
 # Remove global mode
 SCA_matrix_ngm = remove_global_correlations(SCA_matrix)
 ax = axes[0, 2]
+norm = SymLogNorm(linthresh=1, linscale=1, vmin=SCA_matrix_ngm.min(),
+                  vmax=SCA_matrix_ngm.max())
 im = ax.imshow(SCA_matrix_ngm[np.ix_(sorted_pos, sorted_pos)],
-               vmin=0, vmax=2,
+               # vmin=0, vmax=2,
+               norm=norm,
                interpolation='none', aspect='equal',
                extent=[0, cumul_sizes, cumul_sizes, 0],
                cmap='inferno')
@@ -113,4 +123,5 @@ ax.set_yticklabels(['XCoR_%d' % ix for ix in range(1, len(xcors)+1)],
 add_letter_and_title(axes[0, 2], "C.", "without global mode")
 
 fig.savefig("figures/figure_2.pdf")
+fig.savefig("figures/figure_2.svg")
 fig.savefig("figures/figure_2.png", dpi=300)
