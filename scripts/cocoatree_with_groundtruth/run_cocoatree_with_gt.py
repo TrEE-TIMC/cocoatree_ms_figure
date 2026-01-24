@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 from cocoatree import datasets
 from cocoatree import perform_sca
-from cocoatree.deconvolution import remove_global_correlations
+from cocoatree.decomposition import remove_global_correlations
 from cocoatree.statistics import position
 from cocoatree.io import export_fasta
 
