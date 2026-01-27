@@ -1,15 +1,9 @@
 import os
-
-import numpy as np
 import pandas as pd
-
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
-
 from plotmastery.utils_subfigure import add_letter_and_title
-
 from utils.vis import plot_scatter_sectors
-from utils.vis import plot_coev_mat_xcors
 from utils.vis import plot_image
 from utils.postprocessing import annotate_results
 from utils.colors_and_labels import labels, IC_labels
@@ -37,7 +31,7 @@ results = annotate_results(results)
 sca_sectors = [c for c in results.columns if c.startswith("xcor")]
 n_comp = len(sca_sectors)
 
-fig = plt.figure(figsize=(8.3, 11.7))
+fig = plt.figure(figsize=(8.3, 9))
 gs = GridSpec(1106, 1000, figure=fig, top=0.95, left=0.1, right=0.99,
               bottom=0.05)
 
@@ -65,7 +59,7 @@ for i in range(n_comp):
 
         if i == j-1:
             ax.set_xlabel(f"PC{j+1}", fontweight="bold", fontsize="small",
-                         labelpad=2)
+                          labelpad=2)
             ax.set_ylabel(f"PC{i+1}", fontweight="bold", fontsize="small",
                           labelpad=2)
         else:
@@ -92,10 +86,10 @@ for i in range(n_comp):
            annotate=False, add_labels=False)
 
         if i == j-1:
-            ax.set_xlabel(f"{IC_labels[j]}", fontweight="bold", fontsize="small",
-                         labelpad=2)
-            ax.set_ylabel(f"{IC_labels[i]}", fontweight="bold", fontsize="small",
-                          labelpad=2)
+            ax.set_xlabel(f"{IC_labels[j]}", fontweight="bold",
+                          fontsize="small", labelpad=2)
+            ax.set_ylabel(f"{IC_labels[i]}", fontweight="bold",
+                          fontsize="small", labelpad=2)
         else:
             ax.set_xticklabels([])
             ax.set_yticklabels([])
@@ -104,37 +98,9 @@ for i in range(n_comp):
             add_letter_and_title(ax, "B.", "Independant components")
 
 ###############################################################################
-# XCoR coevolution matrix
-
-col_start = (n_comp-1)*(height + sep) + 3*sep
-height = 195
-
-ax = fig.add_subplot(gs[col_start:col_start+height, :2*height])
-
-coev_mat = pd.read_csv(results_filename.replace(".csv", "-distance.csv"))
-coev_mat.columns = coev_mat.columns.astype(int)
-
-results = pd.read_csv(results_filename)
-results = annotate_results(results)
-
-cb = plot_coev_mat_xcors(fig, ax, results, coev_mat)
-add_letter_and_title(ax, "C.", "XCoR coevolution")
-
-
-ax = fig.add_subplot(gs[col_start:col_start+height, 500:500+2*height])
-
-coev_mat = pd.read_csv(results_filename.replace(".csv", "-distance_ngm.csv"))
-coev_mat.columns = coev_mat.columns.astype(int)
-
-results = pd.read_csv(results_filename)
-results = annotate_results(results)
-
-cb = plot_coev_mat_xcors(fig, ax, results, coev_mat)
-add_letter_and_title(ax, "D.", "XCoR coevolution (without global mode)")
-
-###############################################################################
 # 3D structures
-col_start = col_start + height + 3*sep
+col_start = (n_comp-1)*(height + sep) + 3*sep
+#col_start = col_start + height + 3*sep
 
 height = 200
 width = int((1000-n_comp*sep)/n_comp)
@@ -147,9 +113,9 @@ for i, sector in enumerate(labels[:n_comp]):
         gs[col_start:col_start+height,
            i*(width+sep):(i+1)*width + i*sep])
     if i == 0:
-        add_letter_and_title(ax, "E.", "3D structures")
+        add_letter_and_title(ax, "C.", "3D structures")
 
-    path = f"images/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}_{sector}_sector_1.png"
+    path = f"images/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}_{sector}_xcor_1.png"
     plot_image(ax, path, trim=trim)
 
 
@@ -162,7 +128,7 @@ for i, sector in enumerate(labels[:n_comp]):
         gs[col_start:col_start+height,
            i*(width+sep):(i+1)*width + i*sep])
 
-    path = f"images/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}_{sector}_sector_2.png"
+    path = f"images/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}_{sector}_xcor_2.png"
     plot_image(ax, path, trim=trim)
 
 os.makedirs(os.path.dirname(outname), exist_ok=True)
