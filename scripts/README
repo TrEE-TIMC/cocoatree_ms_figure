@@ -1,3 +1,6 @@
 
-
-- cocoatree: folder that contains the cocoatree analysis
+This folder contains all the steps of the pipeline to reproduce the results of
+the articles. It contains only two folders. The first one, called
+`cocoatree_with_groundtruth`, containing a Snakemake, python scripts, and
+pymol scripts to run the analysis, plot the results, etc. The second, utils,
+contains some Python modules useful for the reproducibility of the article.
