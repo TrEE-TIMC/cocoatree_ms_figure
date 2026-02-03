@@ -1,6 +1,6 @@
-
-For each dataset, put the MSA, PDB, and groundtruth sectors in a folder
-structured as follows
+This folder contains additional datasets compared to the one provided as part
+of cocoatree. This includes in particular the MSA that were build for the
+purpose of phylogenetic tree visualization for Halabi et al.
 
 
 HALABI dataset
