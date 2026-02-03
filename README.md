@@ -1,7 +1,7 @@
-# README
+# COCOA-Tree: Phylogenetic visualization and comparative analysis of coevolving residues
 
-This git repository has been built using the `template-research-project`
-template or is the `template-research project`.
+This git repository contains all the code to reproduce the precise figures of
+Jullien et al.
 
 ## Project organization
 
