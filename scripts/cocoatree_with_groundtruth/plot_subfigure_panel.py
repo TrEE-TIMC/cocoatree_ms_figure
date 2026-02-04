@@ -58,9 +58,9 @@ for i in range(n_comp):
            annotate=False, add_labels=False)
 
         if i == j-1:
-            ax.set_xlabel(f"PC{j+1}", fontweight="bold", fontsize="small",
+            ax.set_xlabel(f"EV{j+1}", fontweight="bold", fontsize="small",
                           labelpad=2)
-            ax.set_ylabel(f"PC{i+1}", fontweight="bold", fontsize="small",
+            ax.set_ylabel(f"EV{i+1}", fontweight="bold", fontsize="small",
                           labelpad=2)
         else:
             ax.set_xticklabels([])
