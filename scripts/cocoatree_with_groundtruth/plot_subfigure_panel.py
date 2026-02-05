@@ -67,7 +67,7 @@ for i in range(n_comp):
             ax.set_yticklabels([])
 
         if i == 0 and j == 1:
-            add_letter_and_title(ax, "A.", "Eigenvalues (EV)")
+            add_letter_and_title(ax, "A.", "Eigenvectors (EV)")
 
 ###############################################################################
 # IC scatter plots
@@ -95,7 +95,7 @@ for i in range(n_comp):
             ax.set_yticklabels([])
 
         if i == 0 and j == 1:
-            add_letter_and_title(ax, "B.", "Independant components")
+            add_letter_and_title(ax, "B.", "Independant components (IC)")
 
 ###############################################################################
 # 3D structures
