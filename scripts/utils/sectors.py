@@ -29,6 +29,15 @@ def compute_IOU_metric_all_vs_all(res):
     return all_scores
 
 
+def compute_all_vs_all(sectors_per_method, comp1=0, comp2=0):
+    IOU_metric = np.zeros(
+        (len(sectors_per_method), len(sectors_per_method)))
+    for i, met1 in enumerate(sectors_per_method):
+        for j, met2 in enumerate(sectors_per_method):
+            IOU_metric[i, j] = compute_IOU_metric(met1[comp1], met2[comp2])
+    return IOU_metric
+
+
 def get_best_ordered_sectors(res, dataset="halabi", type="SCA",
                              correction=None):
     sector_cols = [c for c in res.columns if c.startswith("xcor")]
@@ -59,3 +68,5 @@ def get_best_ordered_sectors(res, dataset="halabi", type="SCA",
         order = [2, 3, 0, 1]
 
     return order
+
+
