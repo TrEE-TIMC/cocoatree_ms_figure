@@ -4,18 +4,9 @@ import pandas as pd
 from utils.vis import sectors_cm
 from plotmastery.utils_subfigure import add_letter_and_title
 from plotmastery import utils_heatmap
-from utils.sectors import compute_IOU_metric
+from utils.sectors import compute_all_vs_all
 
 datasets = ["halabi"]
-
-
-def compute_all_vs_all(sectors_per_method, comp1=0, comp2=0):
-    IOU_metric = np.zeros(
-        (len(sectors_per_method), len(sectors_per_method)))
-    for i, met1 in enumerate(sectors_per_method):
-        for j, met2 in enumerate(sectors_per_method):
-            IOU_metric[i, j] = compute_IOU_metric(met1[comp1], met2[comp2])
-    return IOU_metric
 
 
 cmaps = list(sectors_cm.values())
