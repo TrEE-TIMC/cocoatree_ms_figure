@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 
 from utils.sectors import get_best_ordered_sectors
 from utils.sectors import compute_all_vs_all
+from utils.sectors import compute_IOU_metric
 from utils.vis import sectors_cm
 from plotmastery import utils_heatmap
 from plotmastery.utils_subfigure import add_letter_and_title
@@ -32,6 +33,39 @@ sequence_thresholds = [0.1, 0.2, 0.3]
 gap_thresholds = [0.3, 0.4, 0.5]
 
 letters = ["A.", "B.", "C.", "D."]
+
+def find_best_component_permutation(result, reference_result, sector_cols=None):
+    """Return the component permutation that best matches a reference result."""
+    if sector_cols is None:
+        sector_cols = [c for c in result.columns if c.startswith("xcor")]
+        sector_cols.sort()
+
+    sector_cols = [c for c in sector_cols if c in result.columns]
+    reference_cols = [c for c in sector_cols if c in reference_result.columns]
+
+    if len(sector_cols) != len(reference_cols):
+        raise ValueError("Reference and current results do not have the same number of components")
+
+    current_memberships = [np.where(result[col])[0] for col in sector_cols]
+    reference_memberships = [np.where(reference_result[col])[0] for col in reference_cols]
+
+    best_permutation = None
+    best_score = -np.inf
+
+    for permutation in itertools.permutations(range(len(sector_cols))):
+        score = np.mean([
+            compute_IOU_metric(
+                reference_memberships[i],
+                current_memberships[permutation[i]],
+                metric="IOU")
+            for i in range(len(sector_cols))
+        ])
+        if score > best_score:
+            best_score = score
+            best_permutation = permutation
+
+    return best_permutation, best_score
+
 
 def compute_sca(dataset, seq_thres=.2, gap_thres=.3):
     if dataset == "rivoire":
@@ -113,10 +147,26 @@ else:
 
 
 labels = []
+results_by_parameter = {}
+
 for gap_thres, seq_thres in itertools.product(gap_thresholds, sequence_thresholds):
     res = mem.cache(compute_sca)(dataset, seq_thres, gap_thres)
-    all_results.append([np.where(res[c])[0] for c in sector_cols if c in res.columns])
+    results_by_parameter[(gap_thres, seq_thres)] = res
     labels.append(f"gap {gap_thres} - seq {seq_thres}")
+
+reference_result = results_by_parameter[(0.4, 0.3)]
+
+for gap_thres, seq_thres in itertools.product(gap_thresholds, sequence_thresholds):
+    res = results_by_parameter[(gap_thres, seq_thres)]
+    permutation, _ = find_best_component_permutation(
+        res,
+        reference_result,
+        sector_cols=sector_cols,
+    )
+    component_memberships = [
+        np.where(res[c])[0] for c in sector_cols if c in res.columns]
+    aligned_memberships = [component_memberships[i] for i in permutation]
+    all_results.append(aligned_memberships)
 
 
 fig, axes = plt.subplots(
