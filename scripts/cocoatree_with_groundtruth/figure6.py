@@ -1,3 +1,7 @@
+"""
+Confusion plots
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -18,19 +22,19 @@ for j, dataset in enumerate(datasets):
     dataset_ax = []
     # Load precomputed results
     sca_res = pd.read_csv(
-        f"cocoatree_with_groundtruth/results/cocoatree_gt/{dataset}/cocoatree_SCA_none.csv")
+        f"results/cocoatree_gt/{dataset}/cocoatree_SCA_none.csv")
     sca_res = sca_res.loc[~sca_res["filtered_msa_pos"].isna()]
 
     mi_res = pd.read_csv(
-        f"cocoatree_with_groundtruth/results/cocoatree_gt/{dataset}/cocoatree_MI_none.csv")
+        f"results/cocoatree_gt/{dataset}/cocoatree_MI_none.csv")
     mi_res = mi_res.loc[~mi_res["filtered_msa_pos"].isna()]
 
     nmi_res = pd.read_csv(
-        f"cocoatree_with_groundtruth/results/cocoatree_gt/{dataset}/cocoatree_NMI_none.csv")
+        f"results/cocoatree_gt/{dataset}/cocoatree_NMI_none.csv")
     nmi_res = nmi_res.loc[~nmi_res["filtered_msa_pos"].isna()]
 
     miapc_res = pd.read_csv(
-        f"cocoatree_with_groundtruth/results/cocoatree_gt/{dataset}/cocoatree_MI_APC.csv")
+        f"results/cocoatree_gt/{dataset}/cocoatree_MI_APC.csv")
     miapc_res = miapc_res.loc[~miapc_res["filtered_msa_pos"].isna()]
 
     sector_cols = [
@@ -92,4 +96,4 @@ add_letter_and_title(
     letters[2],
     "Blue XCoR")
 
-fig.savefig("figures/figure_5.pdf")
+fig.savefig("figures/coevo_metrics.pdf")
