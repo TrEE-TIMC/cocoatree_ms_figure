@@ -25,9 +25,10 @@ from joblib import Memory
 mem = Memory(".joblib")
 
 
-dataset = "DHFR"
+dataset = "halabi"
 coevolution_metric = "SCA"
 correction = None
+plot_only_diag = True
 
 sequence_thresholds = [0.1, 0.2, 0.3]
 gap_thresholds = [0.3, 0.4, 0.5]
@@ -168,18 +169,29 @@ for gap_thres, seq_thres in itertools.product(gap_thresholds, sequence_threshold
     aligned_memberships = [component_memberships[i] for i in permutation]
     all_results.append(aligned_memberships)
 
+if plot_only_diag:
+    fig, axes = plt.subplots(
+        ncols=len(sector_cols),
+        figsize=(7.5, 4),
+        tight_layout=True)
 
-fig, axes = plt.subplots(
-    ncols=len(sector_cols),
-    nrows=len(sector_cols),
-    figsize=(7.5, 7.5),
-    tight_layout=True)
+else:
+    fig, axes = plt.subplots(
+        ncols=len(sector_cols),
+        nrows=len(sector_cols),
+        figsize=(7.5, 7.5),
+        tight_layout=True)
 cmaps = list(sectors_cm.values())
 
 for i, xcor1 in enumerate(sector_cols): 
     for j, xcor2 in enumerate(sector_cols):
+        if plot_only_diag and i != j:
+            continue
         overlap = compute_all_vs_all(all_results, comp1=i, comp2=j)
-        ax = axes[i, j]
+        if plot_only_diag:
+            ax = axes[i]
+        else:
+            ax = axes[i, j]
         if i == j:
             cmap = cmaps[i]
         else:
@@ -188,7 +200,7 @@ for i, xcor1 in enumerate(sector_cols):
         utils_heatmap.annotate_heatmap(
                 m, valfmt="{x:1.0f}",
                 fontsize="x-small")
-        if i == (len(sector_cols) - 1):
+        if i == (len(sector_cols) - 1) or plot_only_diag:
             ax.set_xticks(np.arange(len(labels)), labels, fontsize="x-small", rotation=90)
         else:
             ax.set_xticks([])
