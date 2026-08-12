@@ -86,7 +86,7 @@ for n in range(nb_rep):
     # print('n = ' + str(n))
     # Sample k positions that are not included in the XCoR
     rdm_pos = random.choices(range(0, len(trypsin_xcor_pop_seq[0])),
-                            k=len(trypsin_xcor_seq[0]))
+                             k=len(trypsin_xcor_seq[0]))
     random_trypsin_seqs = []
     for sequence in range(len(trypsin_xcor_pop_seq)):
         # print('sequence = ' + str(sequence))
@@ -110,6 +110,8 @@ for n in range(nb_rep):
 
 trypsin_avg_id_mat = trypsin_avg_id_mat/100
 chymo_avg_id_mat = chymo_avg_id_mat/100
+np.median(chymo_avg_id_mat)
+np.median(trypsin_avg_id_mat)
 
 tril_trypsin_rdm_xcor = trypsin_avg_id_mat[np.tril_indices(
     trypsin_avg_id_mat.shape[0])]
@@ -117,7 +119,8 @@ tril_chymo_rdm_xcor = chymo_avg_id_mat[np.tril_indices(
     chymo_avg_id_mat.shape[0])]
 
 # Distributions
-fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(8, 2.66), tight_layout=True)
+fig, axes = plt.subplots(nrows=1, ncols=3, figsize=(8, 2.66),
+                         tight_layout=True)
 ax = axes[0]
 bins = np.arange(0, 1, 0.05)
 ax.hist(tril_trypsin_xcor, bins=bins, alpha=0.7, label='Trypsins',
@@ -160,7 +163,7 @@ ax.tick_params(axis='both', which='both', labelsize='xx-small',
 ax.set_xlabel('Pairwise sequence identity', fontsize='x-small',
               fontweight='bold', labelpad=2)
 ax.set_ylabel('Density', fontsize='x-small', fontweight='bold', labelpad=2)
-add_letter_and_title(ax, 'D.', 'Random XCoR sequences')
+add_letter_and_title(ax, 'D.', 'Non-XCoR sequences of\nXCoR length')
 fig.savefig('figures/halabi/trypsin_vs_chymo_pw_seqid_xcor_1_hist.pdf')
 fig.savefig('figures/halabi/trypsin_vs_chymo_pw_seqid_xcor_1_hist.svg')
 
@@ -243,8 +246,8 @@ for n in range(nb_rep):
 vertebrate_avg_id_mat = vertebrate_avg_id_mat/100
 invertebrate_avg_id_mat = invertebrate_avg_id_mat/100
 
-idmat_vertebrate_sequences = compute_seq_identity(trypsin_seq)
-idmat_vertebrate_xcor = compute_seq_identity(trypsin_xcor_seq)
+idmat_vertebrate_sequences = compute_seq_identity(vertebrate_seq)
+idmat_vertebrate_xcor = compute_seq_identity(vertebrate_xcor_seq)
 idmat_invertebrate_sequences = compute_seq_identity(invertebrate_seq)
 idmat_invertebrate_xcor = compute_seq_identity(invertebrate_xcor_seq)
 
@@ -307,7 +310,7 @@ ax.tick_params(axis='both', which='both', labelsize='xx-small',
 ax.set_xlabel('Pairwise sequence identity', fontsize='x-small',
               fontweight='bold', labelpad=2)
 ax.set_ylabel('Density', fontsize='x-small', fontweight='bold', labelpad=2)
-add_letter_and_title(ax, 'D.', 'Random XCoR sequences')
+add_letter_and_title(ax, 'D.', 'Non-XCoR sequences of\nXCoR length')
 fig.savefig('figures/halabi/vert_vs_invert_pw_seqid_xcor_3_hist.pdf')
 fig.savefig('figures/halabi/vert_vs_invert_pw_seqid_xcor_3_hist.svg')
 
