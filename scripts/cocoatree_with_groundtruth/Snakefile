@@ -1,7 +1,8 @@
 from glob import glob
 import itertools
 
-datasets =  ["halabi", "rhomboid", "DHFR"]
+
+datasets = ["halabi", "rhomboid", "DHFR"]
 coevolution_metrics = ["SCA", "MI", "NMI"]
 corrections = ["none", "APC", "entropy"]
 
@@ -9,71 +10,90 @@ corrections = ["none", "APC", "entropy"]
 ###############################################################################
 # Global commands that can be ran using `snakemake {command}`
 
+
 rule run_all:
     input:
         expand(
             "results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv",
             dataset=datasets,
             metric=coevolution_metrics,
-            correction=corrections),
-        expand("images/cocoatree_gt/{dataset}/sectors-ICA-{metric}_{correction}.png",
-               dataset=datasets,
-               metric=coevolution_metrics,
-               correction=corrections),
-        expand("images/cocoatree_gt/{dataset}/sectors-PCA-{metric}_{correction}.png",
-               dataset=datasets,
-               metric=coevolution_metrics,
-               correction=corrections),
-        expand("images/cocoatree_gt/{dataset}/coev_matrix_sectors-{metric}_{correction}.png",
-               dataset=datasets, metric=coevolution_metrics,
-	       correction=corrections),
-        expand("images/cocoatree_gt/{dataset}/coev_matrix_sectors_ngm-{metric}_{correction}.png",
-               dataset=datasets, metric=coevolution_metrics,
-	       correction=corrections),
-        expand("figures/{dataset}/confusion_row.png",
-               dataset=datasets),
-        expand("figures/{dataset}/sectors_pdb.png",
-               dataset=datasets),
+            correction=corrections
+        ),
+        expand(
+            "images/cocoatree_gt/{dataset}/sectors-ICA-{metric}_{correction}.png",
+            dataset=datasets,
+            metric=coevolution_metrics,
+            correction=corrections
+        ),
+        expand(
+            "images/cocoatree_gt/{dataset}/sectors-PCA-{metric}_{correction}.png",
+            dataset=datasets,
+            metric=coevolution_metrics,
+            correction=corrections
+        ),
+        expand(
+            "images/cocoatree_gt/{dataset}/coev_matrix_sectors-{metric}_{correction}.png",
+            dataset=datasets,
+            metric=coevolution_metrics,
+            correction=corrections
+        ),
+        expand(
+            "images/cocoatree_gt/{dataset}/coev_matrix_sectors_ngm-{metric}_{correction}.png",
+            dataset=datasets,
+            metric=coevolution_metrics,
+            correction=corrections
+        ),
+        expand(
+            "figures/{dataset}/confusion_row.png",
+            dataset=datasets
+        ),
+        expand(
+            "figures/{dataset}/sectors_pdb.png",
+            dataset=datasets
+        ),
 
 
 rule cocoatree:
     input:
         script="run_cocoatree_with_gt.py",
         utils="utils/sectors.py"
-    output: 
+    output:
         res="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv",
-	    distance="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}-distance.csv",
-	    distance_ngm="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}-distance_ngm.csv"
-    shell: """
-    mkdir -p ../results
-    python {input.script} {wildcards.dataset} \
-        -m {wildcards.metric} \
-        -c {wildcards.correction} -o $(dirname {output.res})
-    """
+        distance="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}-distance.csv",
+        distance_ngm="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}-distance_ngm.csv"
+    shell:
+        """
+        mkdir -p ../results
+        python {input.script} {wildcards.dataset} \
+            -m {wildcards.metric} \
+            -c {wildcards.correction} -o $(dirname {output.res})
+        """
 
 
 rule plot_sectors_ICA:
     input:
         res="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv",
         script="plot_scatter_sectors.py"
-    output: 
+    output:
         png="images/cocoatree_gt/{dataset}/sectors-ICA-{metric}_{correction}.png",
         pdf="images/cocoatree_gt/{dataset}/sectors-ICA-{metric}_{correction}.pdf"
-    shell: """
-    python {input.script} {input.res} -o {output.png}
-    """
+    shell:
+        """
+        python {input.script} {input.res} -o {output.png}
+        """
 
 
 rule plot_sectors_PCA:
     input:
         res="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv",
         script="plot_scatter_sectors.py"
-    output: 
+    output:
         png="images/cocoatree_gt/{dataset}/sectors-PCA-{metric}_{correction}.png",
         pdf="images/cocoatree_gt/{dataset}/sectors-PCA-{metric}_{correction}.pdf"
-    shell: """
-    python {input.script} {input.res} --pca -o {output.png}
-    """
+    shell:
+        """
+        python {input.script} {input.res} --pca -o {output.png}
+        """
 
 
 def all_res(wildcards):
@@ -81,8 +101,11 @@ def all_res(wildcards):
     """
     all_results = [
         f"results/cocoatree_gt/{wildcards.dataset}/cocoatree_{metric}_{correction}.csv"
-        for metric, correction in itertools.product(coevolution_metrics,
-                                                    corrections)]
+        for metric, correction in itertools.product(
+            coevolution_metrics,
+            corrections
+        )
+    ]
     return all_results
 
 
@@ -95,44 +118,48 @@ rule plot_confusion_matrix:
     output:
         png="figures/{dataset}/confusion_row.png",
         pdf="figures/{dataset}/confusion_row.pdf"
-    shell: """
-    python {input.script} {wildcards.dataset}
-    """
+    shell:
+        """
+        python {input.script} {wildcards.dataset}
+        """
 
 
 rule plot_sectors_along_pdb:
     input:
         all_res=all_res,
-	script="plot_figure_sectors.py"
+        script="plot_figure_sectors.py"
     output:
         png="figures/{dataset}/sectors_pdb.png",
-        pdf="figures/{dataset}/sectors_pdb.pdf",
-    shell: """
-    python {input.script} {wildcards.dataset}
-    """
+        pdf="figures/{dataset}/sectors_pdb.pdf"
+    shell:
+        """
+        python {input.script} {wildcards.dataset}
+        """
 
 
 rule plot_coevolution_matrix:
     input:
         script="plot_coevolution_matrix_sectors.py",
         res="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv",
-        dis="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}-distance.csv",
+        dis="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}-distance.csv"
     output:
         png="images/cocoatree_gt/{dataset}/coev_matrix_sectors-{metric}_{correction}.png",
         pdf="images/cocoatree_gt/{dataset}/coev_matrix_sectors-{metric}_{correction}.pdf"
-    shell: """
-    python {input.script} {input.dis} {input.res} -o {output.png}
-    """
+    shell:
+        """
+        python {input.script} {input.dis} {input.res} -o {output.png}
+        """
 
 
 rule plot_coevolution_matrix_ngm:
     input:
         script="plot_coevolution_matrix_sectors.py",
         res="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}.csv",
-        dis="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}-distance_ngm.csv",
+        dis="results/cocoatree_gt/{dataset}/cocoatree_{metric}_{correction}-distance_ngm.csv"
     output:
         png="images/cocoatree_gt/{dataset}/coev_matrix_sectors_ngm-{metric}_{correction}.png",
         pdf="images/cocoatree_gt/{dataset}/coev_matrix_sectors_ngm-{metric}_{correction}.pdf"
-    shell: """
-    python {input.script} {input.dis} {input.res} -l D. -o {output.png}
-    """
+    shell:
+        """
+        python {input.script} {input.dis} {input.res} -l D. -o {output.png}
+        """
